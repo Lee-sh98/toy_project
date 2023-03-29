@@ -5,5 +5,5 @@ public enum Role {
     EXECUTIVE,
     GENERAL,
     GRADUATE,
-    NON_MEMBER
+    GUEST
 }
