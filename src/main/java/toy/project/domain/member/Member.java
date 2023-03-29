@@ -1,6 +1,8 @@
 package toy.project.domain.member;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
 public class Member {
     private Long id;
     private Role role;
@@ -9,5 +11,4 @@ public class Member {
         this.id = id;
         this.role = role;
     }
-
 }
