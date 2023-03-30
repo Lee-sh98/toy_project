@@ -1,7 +1,7 @@
 package hicc.toy_project.service;
 
 
-import hicc.toy_project.controller.dto.MyPageRequestDto;
+import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.domain.member.Role;
 import hicc.toy_project.repository.MemberRepository;
@@ -20,12 +20,12 @@ public class MyPageService {
     public Member memberInfo(String id) {
         Optional<Member> result = memberRepository.findById(id);
         return result.orElseGet(() ->
-                new Member("NoMember", Role.GUEST, "NoMember")
+                new Member("NoMember", "NoMember", "NoMember")
         );
     }
 
     @Transactional
-    public Boolean memberModify(MyPageRequestDto request) {
+    public Boolean memberModify(MyPageRequest request) {
         return true;
     }
 }
