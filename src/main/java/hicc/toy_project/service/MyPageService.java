@@ -3,7 +3,6 @@ package hicc.toy_project.service;
 
 import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.domain.member.Member;
-import hicc.toy_project.domain.member.Role;
 import hicc.toy_project.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,7 @@ public class MyPageService {
 
     @Transactional
     public Boolean memberModify(MyPageRequest request) {
-        return true;
+        Optional<Member> result = memberRepository.findById(request.getId());
+        return result.map(member -> member.update(request.getNickName(), request.getPhoneNumber())).orElse(false);
     }
 }

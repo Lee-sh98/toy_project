@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 
 
 @Entity
@@ -26,5 +27,12 @@ public class Member {
         this.id = id;
         this.nickName = nickName;
         this.phoneNumber = phoneNumber;
+    }
+
+    @Modifying(clearAutomatically = true)
+    public boolean update(String nickName, String phoneNumber){
+        this.nickName = nickName;
+        this.phoneNumber = phoneNumber;
+        return true;
     }
 }
