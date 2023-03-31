@@ -1,11 +1,14 @@
 package hicc.toy_project.controller;
 
 import hicc.toy_project.controller.dto.MyPageRequest;
+import hicc.toy_project.controller.dto.PostResponse;
 import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,8 +29,8 @@ public class MyPageApiController {
 
     @GetMapping("/mypage/post")
     @ResponseBody
-    public void myPagePost() {
-
+    public List<PostResponse> myPagePost(@RequestBody MyPageRequest request) {
+        return myPageService.myPost(request.getId());
     }
 
     @GetMapping("/mypage/{id}/comment")
