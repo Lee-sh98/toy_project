@@ -1,5 +1,6 @@
 package hicc.toy_project.controller;
 
+import hicc.toy_project.controller.dto.CommentResponse;
 import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.controller.dto.PostResponse;
 import hicc.toy_project.domain.member.Member;
@@ -33,10 +34,10 @@ public class MyPageApiController {
         return myPageService.myPost(request.getId());
     }
 
-    @GetMapping("/mypage/{id}/comment")
+    @GetMapping("/mypage/comment")
     @ResponseBody
-    public void myPageComment() {
-
+    public List<CommentResponse> myPageComment(@RequestBody MyPageRequest request) {
+        return myPageService.myComment(request.getId());
     }
 
 
