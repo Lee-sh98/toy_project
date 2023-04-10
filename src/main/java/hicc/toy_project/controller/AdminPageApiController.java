@@ -16,6 +16,11 @@ import java.util.List;
 public class AdminPageApiController {
     private final AdminPageService adminPageService;
 
+    /**
+     * Body 부분에 들어간 id 값을 가진 멤버가 회장일 경우 모든 회원의 리스트를 반환한다.
+     * @param request {"id":[회장의 id]}
+     * @return List of Members
+     */
     @GetMapping("/admin/members")
     @ResponseBody
     public List<MemberResponse> members(@RequestBody AdminPageRequest request){
