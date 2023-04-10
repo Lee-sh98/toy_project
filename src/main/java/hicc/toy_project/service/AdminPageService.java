@@ -18,10 +18,8 @@ public class AdminPageService {
 
     @Transactional
     public List<MemberResponse> members(String id){
-        if (!memberRepository.existsById(id)) {
-            return new ArrayList<>();
-        }
-        if (memberRepository.findById(id).get().getRole().equals(Role.PRESIDENT)) {
+        if (memberRepository.findById(id).isPresent()
+                && memberRepository.findById(id).get().getRole().equals(Role.PRESIDENT)) {
             return memberRepository.findAll()
                     .stream()
                     .map(MemberResponse::new)
