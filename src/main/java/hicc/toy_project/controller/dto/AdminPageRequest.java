@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminPageRequest {
     private String id;
+    private String targetId;
     private Role role;
     private String nickname;
     private String phoneNumber;
