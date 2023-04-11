@@ -35,4 +35,10 @@ public class Member {
         this.phoneNumber = phoneNumber;
         return true;
     }
+
+    @Modifying(clearAutomatically = true)
+    public boolean updateRole(Role role){
+        this.role = role;
+        return true;
+    }
 }
