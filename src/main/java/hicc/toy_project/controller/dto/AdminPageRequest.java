@@ -12,8 +12,6 @@ public class AdminPageRequest {
     private String id;
     private String targetId;
     private Role role;
-    private String nickName;
-    private String phoneNumber;
 
     @Builder
     public Member toEntity() {
