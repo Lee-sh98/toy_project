@@ -35,4 +35,10 @@ public class AdminPageApiController {
     public boolean memberModify(@RequestBody AdminPageRequest request) {
         return adminPageService.memberModify(request);
     }
+
+    @GetMapping("/admin/applicants")
+    @ResponseBody
+    public List<MemberResponse> applicants(@RequestBody AdminPageRequest request) {
+        return adminPageService.applicants(request.getId());
+    }
 }
