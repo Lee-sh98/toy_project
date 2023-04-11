@@ -30,6 +30,14 @@ public class AdminPageApiController {
         return adminPageService.members(request.getId());
     }
 
+    /**
+     * Body 부분에 들어간 id 값을 가진 멤버가 회장일 경우 targetId 회원의 정보를 수정한다.
+     *
+     * @param request {"id":[회장의 id],
+     *                "targetId": [수정 대상 id],
+     *                "role": [Role]}
+     * @return 회원 정보 수정이 완료되면 True, 수정할 수 없으면 False
+     */
     @PostMapping("/admin/modify")
     @ResponseBody
     public boolean memberModify(@RequestBody AdminPageRequest request) {
