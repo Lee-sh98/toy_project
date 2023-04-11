@@ -22,6 +22,11 @@ public class AdminPageService {
                 && memberRepository.findById(id).get().getRole().equals(Role.PRESIDENT);
     }
 
+    private boolean isExecutive(String id) {
+        return memberRepository.findById(id).isPresent()
+                && memberRepository.findById(id).get().getRole().equals(Role.EXECUTIVE);
+    }
+
     @Transactional
     public List<MemberResponse> members(String id) {
         if (isPresident(id)) {
@@ -42,5 +47,18 @@ public class AdminPageService {
                     .orElse(false);
         }
         return false;
+    }
+
+    @Transactional
+    public List<MemberResponse> applicants(String id) {
+        if (isPresident(id) || isExecutive(id)) {
+            return memberRepository.findAll()
+                    .stream()
+                    .filter(member ->
+                            member.getRole().equals(Role.GUEST))
+                    .map(MemberResponse::new)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 }
