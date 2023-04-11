@@ -32,7 +32,7 @@ public class MyPageService {
     }
 
     @Transactional
-    public Boolean memberModify(MyPageRequest request) {
+    public boolean memberModify(MyPageRequest request) {
         Optional<Member> result = memberRepository.findById(request.getId());
         return result.map(member ->
                 member.update(request.getNickName(), request.getPhoneNumber()))
