@@ -18,13 +18,21 @@ public class AdminPageService {
     private final MemberRepository memberRepository;
 
     private boolean isPresident(String id) {
-        return memberRepository.findById(id).isPresent()
-                && memberRepository.findById(id).get().getRole().equals(Role.PRESIDENT);
+        /*return memberRepository.findById(id).isPresent()
+                && memberRepository.findById(id).get().getRole().equals(Role.PRESIDENT);*/
+
+        return memberRepository.findById(id)
+                .map(member -> member.getRole().equals(Role.PRESIDENT))
+                .orElse(false);
     }
 
     private boolean isExecutive(String id) {
-        return memberRepository.findById(id).isPresent()
-                && memberRepository.findById(id).get().getRole().equals(Role.EXECUTIVE);
+        /*return memberRepository.findById(id).isPresent()
+                && memberRepository.findById(id).get().getRole().equals(Role.EXECUTIVE);*/
+
+        return memberRepository.findById(id)
+                .map(member -> member.getRole().equals(Role.EXECUTIVE))
+                .orElse(false);
     }
 
     @Transactional
@@ -39,14 +47,28 @@ public class AdminPageService {
     }
 
     @Transactional
-    public boolean memberModify(AdminPageRequest request) {
-        if (isPresident(request.getId()) && !request.getId().equals(request.getTargetId())) {
+    public boolean changeRole(AdminPageRequest request) {
+        /*if (isPresident(request.getId())
+                && !request.getId().equals(request.getTargetId())
+                && ) {
             return memberRepository.findById(request.getTargetId())
                     .map(member ->
-                            member.update(request.getNickName(), request.getPhoneNumber()))
+                        member.updateRole(request.getRole()))
                     .orElse(false);
         }
-        return false;
+        return false;*/
+        if (!isPresident(request.getId())) {
+            return false;
+        }
+        if (request.getId().equals(request.getTargetId())) {
+            return false;
+        }
+        if (request.getRole().equals(Role.PRESIDENT)) {
+            return false;
+        }
+        return memberRepository.findById(request.getTargetId())
+                .map(member -> member.updateRole(request.getRole()))
+                .orElse(false);
     }
 
     @Transactional
