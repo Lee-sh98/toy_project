@@ -3,7 +3,6 @@ package hicc.toy_project.controller;
 import hicc.toy_project.controller.dto.AdminPageRequest;
 import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.service.AdminPageService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +30,7 @@ public class AdminPageApiController {
     }
 
     /**
-     * Body 부분에 들어간 id 값을 가진 멤버가 회장일 경우 targetId 회원의 정보를 수정한다.
+     * Body 부분에 들어간 id 값을 가진 멤버가 회장일 경우 targetId 회원의 등급을 수정한다.
      *
      * @param request {"id":[회장의 id],
      *                "targetId": [수정 대상 id],
@@ -40,8 +39,8 @@ public class AdminPageApiController {
      */
     @PostMapping("/admin/modify")
     @ResponseBody
-    public boolean memberModify(@RequestBody AdminPageRequest request) {
-        return adminPageService.memberModify(request);
+    public boolean changeRole(@RequestBody AdminPageRequest request) {
+        return adminPageService.changeRole(request);
     }
 
     @GetMapping("/admin/applicants")
