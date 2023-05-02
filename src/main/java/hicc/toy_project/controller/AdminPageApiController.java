@@ -48,4 +48,17 @@ public class AdminPageApiController {
     public List<MemberResponse> applicants(@RequestBody AdminPageRequest request) {
         return adminPageService.applicants(request.getId());
     }
+
+    /***
+     *
+     * @param request{"id": [회장의 id],
+     *               "targetId": [승인 대상  id]
+     *               "applyRequest": [APPROVED/ REJECTED]}
+     * @return 회원 승인 또는 반려 처리되면 True, 처리할 수 없으면 False
+     */
+    @PostMapping("/admin/approve")
+    @ResponseBody
+    public boolean approve(@RequestBody AdminPageRequest request) {
+        return adminPageService.approve(request);
+    }
 }
