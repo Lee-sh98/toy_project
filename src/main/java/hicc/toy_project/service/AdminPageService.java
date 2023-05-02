@@ -35,6 +35,12 @@ public class AdminPageService {
                 .orElse(false);
     }
 
+    private boolean isGuest(String id){
+        return memberRepository.findById(id)
+                .map(member -> member.getRole().equals(Role.GUEST))
+                .orElse(false);
+    }
+
     @Transactional
     public List<MemberResponse> members(String id) {
         if (isPresident(id)) {
@@ -82,5 +88,20 @@ public class AdminPageService {
                     .collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    @Transactional
+    public boolean approve(AdminPageRequest request) {
+        if (!isPresident(request.getId()) && !isExecutive(request.getId())) {
+            return false;
+        }
+
+        if (!isGuest(request.getTargetId())) {
+            return false;
+        }
+        System.out.println("approve a person");
+        return memberRepository.findById(request.getTargetId())
+                .map(member -> member.updateRole(Role.GENERAL))
+                .orElse(false);
     }
 }
