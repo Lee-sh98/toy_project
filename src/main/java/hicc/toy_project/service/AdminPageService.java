@@ -22,24 +22,18 @@ public class AdminPageService {
     private final DeletedMemberRepository deletedMemberRepository;
 
     private boolean isPresident(String id) {
-        /*return memberRepository.findById(id).isPresent()
-                && memberRepository.findById(id).get().getRole().equals(Role.PRESIDENT);*/
-
         return memberRepository.findById(id)
                 .map(member -> member.getRole().equals(Role.PRESIDENT))
                 .orElse(false);
     }
 
     private boolean isExecutive(String id) {
-        /*return memberRepository.findById(id).isPresent()
-                && memberRepository.findById(id).get().getRole().equals(Role.EXECUTIVE);*/
-
         return memberRepository.findById(id)
                 .map(member -> member.getRole().equals(Role.EXECUTIVE))
                 .orElse(false);
     }
 
-    private boolean isGuest(String id){
+    private boolean isGuest(String id) {
         return memberRepository.findById(id)
                 .map(member -> member.getRole().equals(Role.GUEST))
                 .orElse(false);
@@ -61,15 +55,6 @@ public class AdminPageService {
     // 회원 정보(등급) 수정
     @Transactional
     public boolean changeRole(AdminPageRequest request) {
-        /*if (isPresident(request.getId())
-                && !request.getId().equals(request.getTargetId())
-                && ) {
-            return memberRepository.findById(request.getTargetId())
-                    .map(member ->
-                        member.updateRole(request.getRole()))
-                    .orElse(false);
-        }
-        return false;*/
         // 요청자가 회장인지 확인
         if (!isPresident(request.getId())) {
             return false;
@@ -94,7 +79,7 @@ public class AdminPageService {
         // 같은 등급으로 변경할 수 없음
         if (memberRepository.findById(request.getTargetId())
                 .map(member -> member.getRole().equals(request.getRole()))
-                .orElse(false)){
+                .orElse(false)) {
             return false;
         }
 
@@ -104,26 +89,34 @@ public class AdminPageService {
     }
 
     //회원 제명
-    public boolean expel(AdminPageRequest request){
+    public boolean expel(AdminPageRequest request) {
+        // 요청자가 회장인지 확인
         if (!isPresident(request.getId())) {
             return false;
         }
+
+        // 회장 자기 자신을 제명할 수 없음
         if (isPresident(request.getTargetId())) {
             return false;
         }
+
+        // 타겟 id가 DB에 존재하는지 확인
         if (memberRepository.findById(request.getTargetId()).isEmpty()) {
             return false;
         }
 
         DeletedMember deletedMember = new DeletedMember(memberRepository.findById(request.getTargetId()).get());
         deletedMemberRepository.save(deletedMember);
+
         memberRepository.deleteById(request.getTargetId());
+
         return true;
     }
 
     // 가입 승인 대기 목록 조회
     @Transactional
     public List<MemberResponse> applicants(String id) {
+        // 가입 승인 대기 목록 조회는 회장 또는 임원진만 가능
         if (isPresident(id) || isExecutive(id)) {
             return memberRepository.findAll()
                     .stream()
@@ -138,20 +131,28 @@ public class AdminPageService {
     // 가입 승인 처리
     @Transactional
     public boolean approve(AdminPageRequest request) {
+        // 가입 승인 처리는 회장 또는 임원진만 가능
         if (!isPresident(request.getId()) && !isExecutive(request.getId())) {
             return false;
         }
 
+        // 타겟 id가 게스트인지 확인
         if (!isGuest(request.getTargetId())) {
             return false;
         }
-        if (request.getApproveRequest().equals(ApproveRequest.REJECT)){
+
+        // 가입 거부 처리
+        if (request.getApproveRequest().equals(ApproveRequest.REJECT)) {
             memberRepository.deleteById(request.getTargetId());
             return true;
         }
 
-        return memberRepository.findById(request.getTargetId())
-                .map(member -> member.updateRole(Role.GENERAL))
-                .orElse(false);
+        // 가입 승인 처리
+        if (request.getApproveRequest().equals(ApproveRequest.APPROVE)) {
+            return memberRepository.findById(request.getTargetId())
+                    .map(member -> member.updateRole(Role.GENERAL))
+                    .orElse(false);
+        }
+        return false;
     }
 }
