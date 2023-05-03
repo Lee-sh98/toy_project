@@ -60,8 +60,8 @@ public class AdminPageApiController {
 
     /***
      * 가입 승인 대기 목록 조회
-     * @param request
-     * @return
+     * @param request {"id":[회장 또는 임원진의 id]}
+     * @return 가입 승인 대기중인 회원 리스트
      */
     @GetMapping("/admin/applicants")
     @ResponseBody
@@ -71,9 +71,9 @@ public class AdminPageApiController {
 
     /***
      * 회원 가입 승인 및 거부
-     * @param request{"id": [회장 또는 임원진의 id],
-     *               "targetId": [승인 대상  id]
-     *               "applyRequest": [APPROVED/ REJECTED]}
+     * @param request {"id": [회장 또는 임원진의 id],
+     *                "targetId": [승인 대상  id]
+     *                "approveRequest": [APPROVE/ REJECT]}
      * @return 회원 승인 또는 반려 처리되면 True, 처리할 수 없으면 False
      */
     @PostMapping("/admin/approve")
