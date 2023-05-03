@@ -35,7 +35,7 @@ public class AdminPageApiController {
      * Body 부분에 들어간 id 값을 가진 멤버가 회장일 경우 targetId 회원의 등급을 수정한다.
      *
      * @param request {"id":[회장의 id],
-     *                "targetId": [수정 대상 id],
+     *                "targetId": [수정 대상 id]
      *                "role": [Role]}
      * @return 회원 정보 수정이 완료되면 True, 수정할 수 없으면 False
      */
@@ -53,7 +53,7 @@ public class AdminPageApiController {
      */
     @PostMapping("/admin/expel")
     @ResponseBody
-    public boolean expel(@RequestBody AdminPageRequest request){
+    public boolean expel(@RequestBody AdminPageRequest request) {
         return adminPageService.expel(request);
     }
 
@@ -74,7 +74,7 @@ public class AdminPageApiController {
      * @param request {"id": [회장 또는 임원진의 id],
      *                "targetId": [승인 대상  id]
      *                "approveRequest": [APPROVE/ REJECT]}
-     * @return 회원 승인 또는 반려 처리되면 True, 처리할 수 없으면 False
+     * @return 회원 승인 또는 거부 처리되면 True, 처리할 수 없으면 False
      */
     @PostMapping("/admin/approve")
     @ResponseBody
@@ -89,7 +89,7 @@ public class AdminPageApiController {
      */
     @GetMapping("/admin/rental/umbrella/application")
     @ResponseBody
-    public void umbrellaApplication(@RequestBody AdminPageRequest request){
+    public void umbrellaApplication(@RequestBody AdminPageRequest request) {
     }
 
     /***
@@ -97,7 +97,7 @@ public class AdminPageApiController {
      */
     @GetMapping("/admin/rental/umbrella/lend")
     @ResponseBody
-    public void lendUmbrella(){
+    public void lendUmbrella() {
 
     }
 
