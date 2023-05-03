@@ -12,6 +12,7 @@ public class AdminPageRequest {
     private String id;
     private String targetId;
     private Role role;
+    private ApproveRequest approveRequest;
 
     @Builder
     public Member toEntity() {
