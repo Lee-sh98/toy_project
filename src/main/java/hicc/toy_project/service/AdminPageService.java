@@ -1,6 +1,7 @@
 package hicc.toy_project.service;
 
 import hicc.toy_project.controller.dto.AdminPageRequest;
+import hicc.toy_project.controller.dto.ApproveRequest;
 import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.domain.member.DeletedMember;
 import hicc.toy_project.domain.member.Role;
@@ -69,15 +70,27 @@ public class AdminPageService {
                     .orElse(false);
         }
         return false;*/
+        // 요청자가 회장인지 확인
         if (!isPresident(request.getId())) {
             return false;
         }
+
+        // 회장 자기자신은 U 불가능
+        // id == targetId 인 경우
         if (request.getId().equals(request.getTargetId())) {
             return false;
         }
+
+        // 회장으로 직책을 변경할 수 없음
         if (request.getRole().equals(Role.PRESIDENT)) {
             return false;
         }
+
+        // 게스트로 변경할 수 없음
+        if (request.getRole().equals(Role.GUEST)) {
+            return false;
+        }
+
         return memberRepository.findById(request.getTargetId())
                 .map(member -> member.updateRole(request.getRole()))
                 .orElse(false);
@@ -125,6 +138,11 @@ public class AdminPageService {
         if (!isGuest(request.getTargetId())) {
             return false;
         }
+        if (request.getApproveRequest().equals(ApproveRequest.REJECT)){
+            memberRepository.deleteById(request.getTargetId());
+            return true;
+        }
+
         return memberRepository.findById(request.getTargetId())
                 .map(member -> member.updateRole(Role.GENERAL))
                 .orElse(false);
