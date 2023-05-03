@@ -119,14 +119,15 @@
 
 #### **DeletedMember**
 
-| Deleted_Member | 자료형    | 비고  |
-|----------------|--------|-----|
-| id             | String | PK  |
-| role           | Role   |     |
-| nickName       | String |     |
-| phoneNumber    | String |     |
-| major          | String |     |
-| photo          | String |     |
+| Deleted_Member | 자료형            | 비고  |
+|----------------|----------------|-----|
+| id             | String         | PK  |
+| role           | Role           |     |
+| nickName       | String         |     |
+| phoneNumber    | String         |     |
+| major          | String         |     |
+| photo          | String         |     |
+| expelledDate   | LocalDateTime  |     |
 
 
 #### **BOARD**
