@@ -55,7 +55,7 @@
 |------|----------------|------------------------|----------|
 | 1    | 회원 정보 조회       |                        | 회장       |
 | 2    | 회원 정보 수정       | 회장 자기 자신은 U 불가능        | 회장       |
-| 3    | 회원 탈퇴          | 회장 자기 자신은 D 불가능        | 회장       |
+| 3    | 회원 제명          | 회장 자기 자신은 D 불가능        | 회장       |
 | 4    | 가입 승인 대기 목록 조회 | 비회원 등급의 사용자 R          | 회장, 임원진  |
 | 5    | 회원 가입 승인       | 졸업 / 재학생 구분 , 가입 반려 문제 | 회장, 임원진  |
 | 6    | 우산, 사물함 신청 조회  |                        | 회장, 임원진  |
@@ -98,14 +98,14 @@
 ## DB
 #### **Member**
 
-| Member      | 설명      | 비고  |
-|-------------|---------|-----|
-| id          | String  | PK  |
-| role        | Role    |     |
-| nickName    | String  |     |
-| phoneNumber | String  |     |
-| major       | String  |     |
-| photo       | String  |     |
+| Member      | 자료형    | 비고  |
+|-------------|--------|-----|
+| id          | String | PK  |
+| role        | Role   |     |
+| nickName    | String |     |
+| phoneNumber | String |     |
+| major       | String |     |
+| photo       | String |     |
 
 
 | Role      | 설명   |
@@ -116,6 +116,18 @@
 | GRADUATE  | 졸업생  |
 | GUEST     | 비회원  |
 - 이름, 학번은?
+
+#### **DeletedMember**
+
+| Deleted_Member | 자료형    | 비고  |
+|----------------|--------|-----|
+| id             | String | PK  |
+| role           | Role   |     |
+| nickName       | String |     |
+| phoneNumber    | String |     |
+| major          | String |     |
+| photo          | String |     |
+
 
 #### **BOARD**
 
@@ -150,8 +162,17 @@
 | writtenDate | LocalDateTime |     |
 
 
-- **UMBRELLA**
-    - 우산 id **(PK)**
+#### **UMBRELLA**
+| Umbrella   | 자료형    | 비고  |
+|------------|--------|-----|
+| umbrellaId | String | PK  |
+| rent       | Rent   |     |
+
+| Rent         | 설명    |
+|--------------|-------|
+| USABLE       | 사용가능  |
+| OCCUPIED     | 사용중   |
+| UNAVAILABLE  | 사용불가  |
 
 
 - **LOCKER**
