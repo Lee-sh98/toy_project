@@ -2,7 +2,9 @@ package hicc.toy_project.service;
 
 import hicc.toy_project.controller.dto.AdminPageRequest;
 import hicc.toy_project.controller.dto.MemberResponse;
+import hicc.toy_project.domain.member.DeletedMember;
 import hicc.toy_project.domain.member.Role;
+import hicc.toy_project.repository.DeletedMemberRepository;
 import hicc.toy_project.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminPageService {
     private final MemberRepository memberRepository;
+    private final DeletedMemberRepository deletedMemberRepository;
 
     private boolean isPresident(String id) {
         /*return memberRepository.findById(id).isPresent()
@@ -41,17 +44,20 @@ public class AdminPageService {
                 .orElse(false);
     }
 
+    // 모든 회원 조회
     @Transactional
     public List<MemberResponse> members(String id) {
-        if (isPresident(id)) {
-            return memberRepository.findAll()
-                    .stream()
-                    .map(MemberResponse::new)
-                    .collect(Collectors.toList());
+        if (!isPresident(id)) {
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+
+        return memberRepository.findAll()
+                .stream()
+                .map(MemberResponse::new)
+                .collect(Collectors.toList());
     }
 
+    // 회원 정보(등급) 수정
     @Transactional
     public boolean changeRole(AdminPageRequest request) {
         /*if (isPresident(request.getId())
@@ -77,6 +83,25 @@ public class AdminPageService {
                 .orElse(false);
     }
 
+    //회원 제명
+    public boolean expel(AdminPageRequest request){
+        if (!isPresident(request.getId())) {
+            return false;
+        }
+        if (isPresident(request.getTargetId())) {
+            return false;
+        }
+        if (memberRepository.findById(request.getTargetId()).isEmpty()) {
+            return false;
+        }
+
+        DeletedMember deletedMember = new DeletedMember(memberRepository.findById(request.getTargetId()).get());
+        deletedMemberRepository.save(deletedMember);
+        memberRepository.deleteById(request.getTargetId());
+        return true;
+    }
+
+    // 가입 승인 대기 목록 조회
     @Transactional
     public List<MemberResponse> applicants(String id) {
         if (isPresident(id) || isExecutive(id)) {
@@ -90,6 +115,7 @@ public class AdminPageService {
         return new ArrayList<>();
     }
 
+    // 가입 승인 처리
     @Transactional
     public boolean approve(AdminPageRequest request) {
         if (!isPresident(request.getId()) && !isExecutive(request.getId())) {
@@ -99,7 +125,6 @@ public class AdminPageService {
         if (!isGuest(request.getTargetId())) {
             return false;
         }
-        System.out.println("approve a person");
         return memberRepository.findById(request.getTargetId())
                 .map(member -> member.updateRole(Role.GENERAL))
                 .orElse(false);
