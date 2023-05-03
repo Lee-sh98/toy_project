@@ -91,6 +91,13 @@ public class AdminPageService {
             return false;
         }
 
+        // 같은 등급으로 변경할 수 없음
+        if (memberRepository.findById(request.getTargetId())
+                .map(member -> member.getRole().equals(request.getRole()))
+                .orElse(false)){
+            return false;
+        }
+
         return memberRepository.findById(request.getTargetId())
                 .map(member -> member.updateRole(request.getRole()))
                 .orElse(false);
