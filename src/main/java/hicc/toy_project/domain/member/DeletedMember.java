@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -17,6 +19,7 @@ public class DeletedMember {
     private String nickName;
     private String phoneNumber;
     private String major;
+    private LocalDateTime expelledDate;
 
 
     @Builder
@@ -26,5 +29,6 @@ public class DeletedMember {
         this.nickName = member.getNickName();
         this.phoneNumber = member.getPhoneNumber();
         this.major = member.getMajor();
+        this.expelledDate = LocalDateTime.now();
     }
 }
