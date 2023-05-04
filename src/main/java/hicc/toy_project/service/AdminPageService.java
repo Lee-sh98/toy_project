@@ -89,6 +89,7 @@ public class AdminPageService {
     }
 
     //회원 제명
+    @Transactional
     public boolean expel(AdminPageRequest request) {
         // 요청자가 회장인지 확인
         if (!isPresident(request.getId())) {
