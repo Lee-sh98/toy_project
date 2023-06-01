@@ -4,16 +4,12 @@ import hicc.toy_project.controller.dto.AdminPageRequest;
 import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.service.AdminPageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@ResponseBody
+@RestController
+@RequestMapping(value = "/admin")
 @RequiredArgsConstructor
 public class AdminPageApiController {
     private final AdminPageService adminPageService;
@@ -25,7 +21,7 @@ public class AdminPageApiController {
      * @param request {"id":[회장의 id]}
      * @return List of Members
      */
-    @GetMapping("/admin/members")
+    @GetMapping("/members")
     public List<MemberResponse> members(@RequestBody AdminPageRequest request) {
         return adminPageService.members(request.getId());
     }
@@ -39,7 +35,7 @@ public class AdminPageApiController {
      *                "role": [Role]}
      * @return 회원 정보 수정이 완료되면 True, 수정할 수 없으면 False
      */
-    @PostMapping("/admin/modify")
+    @PostMapping("/modify")
     public boolean changeRole(@RequestBody AdminPageRequest request) {
         return adminPageService.changeRole(request);
     }
@@ -50,7 +46,7 @@ public class AdminPageApiController {
      *                "targetId": [제명 대상 id]}
      * @return 회원을 제명처리하면 True, 처리할 수 없으면 False
      */
-    @PostMapping("/admin/expel")
+    @PostMapping("/expel")
     public boolean expel(@RequestBody AdminPageRequest request) {
         return adminPageService.expel(request);
     }
@@ -61,7 +57,7 @@ public class AdminPageApiController {
      * @param request {"id":[회장 또는 임원진의 id]}
      * @return 가입 승인 대기중인 회원 리스트
      */
-    @GetMapping("/admin/applicants")
+    @GetMapping("/applicants")
     public List<MemberResponse> applicants(@RequestBody AdminPageRequest request) {
         return adminPageService.applicants(request.getId());
     }
@@ -83,14 +79,14 @@ public class AdminPageApiController {
      * @param request {"id": [회장 또는 임원진의 id]}
      * @return
      */
-    @GetMapping("/admin/rental/umbrella/application")
+    @GetMapping("/rental/umbrella/application")
     public void umbrellaApplication(@RequestBody AdminPageRequest request) {
     }
 
     /***
      * 우산 대여 신청 처리
      */
-    @GetMapping("/admin/rental/umbrella/lend")
+    @GetMapping("/rental/umbrella/lend")
     public void lendUmbrella() {
 
     }

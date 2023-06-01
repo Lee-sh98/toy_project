@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/mypage")
 @RequiredArgsConstructor
 public class MyPageApiController {
     private final MyPageService myPageService;
@@ -21,7 +22,7 @@ public class MyPageApiController {
      *                Ex) {"id":"X011001"}
      * @return Member
      */
-    @GetMapping("/mypage/info")
+    @GetMapping("/info")
     public Member myPageInfo(@RequestBody MyPageRequest request) {
         return myPageService.memberInfo(request.getId());
     }
@@ -36,7 +37,7 @@ public class MyPageApiController {
      *                }
      * @return 정보 수정이 완료되면 True, 아닐 경우 False
      */
-    @PostMapping("/mypage/modify")
+    @PostMapping("/modify")
     public Boolean myPageModify(@RequestBody MyPageRequest request) {
         return myPageService.memberModify(request);
     }
@@ -47,7 +48,7 @@ public class MyPageApiController {
      *                Ex) {"id":"X011001"}
      * @return List of PostResponse DTO
      */
-    @GetMapping("/mypage/post")
+    @GetMapping("/post")
     public List<PostResponse> myPagePost(@RequestBody MyPageRequest request) {
         return myPageService.myPost(request.getId());
     }
@@ -58,13 +59,13 @@ public class MyPageApiController {
      *                Ex) {"id":"X011001"}
      * @return List of CommentResponse DTO
      */
-    @GetMapping("/mypage/comment")
+    @GetMapping("/comment")
     public List<CommentResponse> myPageComment(@RequestBody MyPageRequest request) {
         return myPageService.myComment(request.getId());
     }
 
 
-    @GetMapping("/mypage/{id}/rental")
+    @GetMapping("/{id}/rental")
     public String myPageRental() {
 
         return "rentals";
