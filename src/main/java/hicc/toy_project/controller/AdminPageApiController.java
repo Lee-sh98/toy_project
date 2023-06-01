@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
+@ResponseBody
 @RequiredArgsConstructor
 public class AdminPageApiController {
     private final AdminPageService adminPageService;
@@ -25,7 +26,6 @@ public class AdminPageApiController {
      * @return List of Members
      */
     @GetMapping("/admin/members")
-    @ResponseBody
     public List<MemberResponse> members(@RequestBody AdminPageRequest request) {
         return adminPageService.members(request.getId());
     }
@@ -40,7 +40,6 @@ public class AdminPageApiController {
      * @return 회원 정보 수정이 완료되면 True, 수정할 수 없으면 False
      */
     @PostMapping("/admin/modify")
-    @ResponseBody
     public boolean changeRole(@RequestBody AdminPageRequest request) {
         return adminPageService.changeRole(request);
     }
@@ -52,7 +51,6 @@ public class AdminPageApiController {
      * @return 회원을 제명처리하면 True, 처리할 수 없으면 False
      */
     @PostMapping("/admin/expel")
-    @ResponseBody
     public boolean expel(@RequestBody AdminPageRequest request) {
         return adminPageService.expel(request);
     }
@@ -64,7 +62,6 @@ public class AdminPageApiController {
      * @return 가입 승인 대기중인 회원 리스트
      */
     @GetMapping("/admin/applicants")
-    @ResponseBody
     public List<MemberResponse> applicants(@RequestBody AdminPageRequest request) {
         return adminPageService.applicants(request.getId());
     }
@@ -77,7 +74,6 @@ public class AdminPageApiController {
      * @return 회원 승인 또는 거부 처리되면 True, 처리할 수 없으면 False
      */
     @PostMapping("/admin/approve")
-    @ResponseBody
     public boolean approve(@RequestBody AdminPageRequest request) {
         return adminPageService.approve(request);
     }
@@ -88,7 +84,6 @@ public class AdminPageApiController {
      * @return
      */
     @GetMapping("/admin/rental/umbrella/application")
-    @ResponseBody
     public void umbrellaApplication(@RequestBody AdminPageRequest request) {
     }
 
@@ -96,7 +91,6 @@ public class AdminPageApiController {
      * 우산 대여 신청 처리
      */
     @GetMapping("/admin/rental/umbrella/lend")
-    @ResponseBody
     public void lendUmbrella() {
 
     }
