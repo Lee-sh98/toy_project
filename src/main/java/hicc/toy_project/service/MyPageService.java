@@ -25,7 +25,7 @@ public class MyPageService {
 
     @Transactional
     public Member memberInfo(String id) {
-        Optional<Member> result = memberRepository.findById(id);
+        Optional<Member> result = memberRepository.findByIdNumber(id);
         return result.orElseGet(() ->
                 new Member("NoMember", "NoMember", "NoMember")
         );
@@ -33,7 +33,7 @@ public class MyPageService {
 
     @Transactional
     public boolean memberModify(MyPageRequest request) {
-        Optional<Member> result = memberRepository.findById(request.getId());
+        Optional<Member> result = memberRepository.findByIdNumber(request.getId());
         return result.map(member ->
                 member.update(request.getNickName(), request.getPhoneNumber()))
                 .orElse(false);
@@ -41,7 +41,7 @@ public class MyPageService {
 
     @Transactional
     public List<PostResponse> myPost(String id) {
-        return postRepository.findAllByMemberId(id)
+        return postRepository.findAllByMemberIdNumber(id)
                 .stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class MyPageService {
 
     @Transactional
     public List<CommentResponse> myComment(String id) {
-        return commentRepository.findAllByMemberId(id)
+        return commentRepository.findAllByMemberIdNumber(id)
                 .stream()
                 .map(CommentResponse::new)
                 .collect(Collectors.toList());

@@ -16,7 +16,7 @@ public class CommentResponse {
 
     public CommentResponse(Comment comment){
         this.commentId = comment.getCommentId();
-        this.memberId = comment.getMember().getId();
+        this.memberId = comment.getMember().getIdNumber();
         this.content = comment.getContent();
         this.writtenDate = comment.getWrittenDate();
 

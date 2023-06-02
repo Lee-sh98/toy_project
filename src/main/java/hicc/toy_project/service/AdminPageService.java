@@ -22,19 +22,19 @@ public class AdminPageService {
     private final DeletedMemberRepository deletedMemberRepository;
 
     private boolean isPresident(String id) {
-        return memberRepository.findById(id)
+        return memberRepository.findByIdNumber(id)
                 .map(member -> member.getRole().equals(Role.PRESIDENT))
                 .orElse(false);
     }
 
     private boolean isExecutive(String id) {
-        return memberRepository.findById(id)
+        return memberRepository.findByIdNumber(id)
                 .map(member -> member.getRole().equals(Role.EXECUTIVE))
                 .orElse(false);
     }
 
     private boolean isGuest(String id) {
-        return memberRepository.findById(id)
+        return memberRepository.findByIdNumber(id)
                 .map(member -> member.getRole().equals(Role.GUEST))
                 .orElse(false);
     }
@@ -77,13 +77,13 @@ public class AdminPageService {
         }
 
         // 같은 등급으로 변경할 수 없음
-        if (memberRepository.findById(request.getTargetId())
+        if (memberRepository.findByIdNumber(request.getTargetId())
                 .map(member -> member.getRole().equals(request.getRole()))
                 .orElse(false)) {
             return false;
         }
 
-        return memberRepository.findById(request.getTargetId())
+        return memberRepository.findByIdNumber(request.getTargetId())
                 .map(member -> member.updateRole(request.getRole()))
                 .orElse(false);
     }
@@ -95,21 +95,18 @@ public class AdminPageService {
         if (!isPresident(request.getId())) {
             return false;
         }
-
         // 회장 자기 자신을 제명할 수 없음
         if (isPresident(request.getTargetId())) {
             return false;
         }
-
         // 타겟 id가 DB에 존재하는지 확인
-        if (memberRepository.findById(request.getTargetId()).isEmpty()) {
+        if (memberRepository.findByIdNumber(request.getTargetId()).isEmpty()) {
             return false;
         }
 
-        DeletedMember deletedMember = new DeletedMember(memberRepository.findById(request.getTargetId()).get());
+        DeletedMember deletedMember = new DeletedMember(memberRepository.findByIdNumber(request.getTargetId()).get());
         deletedMemberRepository.save(deletedMember);
-
-        memberRepository.deleteById(request.getTargetId());
+        memberRepository.deleteByIdNumber(request.getTargetId());
 
         return true;
     }
@@ -144,13 +141,13 @@ public class AdminPageService {
 
         // 가입 거부 처리
         if (request.getApproveRequest().equals(ApproveRequest.REJECT)) {
-            memberRepository.deleteById(request.getTargetId());
+            memberRepository.deleteByIdNumber(request.getTargetId());
             return true;
         }
 
         // 가입 승인 처리
         if (request.getApproveRequest().equals(ApproveRequest.APPROVE)) {
-            return memberRepository.findById(request.getTargetId())
+            return memberRepository.findByIdNumber(request.getTargetId())
                     .map(member -> member.updateRole(Role.GENERAL))
                     .orElse(false);
         }
