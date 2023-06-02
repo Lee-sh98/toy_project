@@ -69,7 +69,7 @@ public class AdminPageApiController {
      *                "approveRequest": [APPROVE/ REJECT]}
      * @return 회원 승인 또는 거부 처리되면 True, 처리할 수 없으면 False
      */
-    @PostMapping("/admin/approve")
+    @PostMapping("/approve")
     public boolean approve(@RequestBody AdminPageRequest request) {
         return adminPageService.approve(request);
     }
