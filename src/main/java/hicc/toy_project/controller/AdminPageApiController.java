@@ -74,21 +74,5 @@ public class AdminPageApiController {
         return adminPageService.approve(request);
     }
 
-    /***
-     * 우산 대여 신청 조회
-     * @param request {"id": [회장 또는 임원진의 id]}
-     * @return
-     */
-    @GetMapping("/rental/umbrella/application")
-    public void umbrellaApplication(@RequestBody AdminPageRequest request) {
-    }
-
-    /***
-     * 우산 대여 신청 처리
-     */
-    @GetMapping("/rental/umbrella/lend")
-    public void lendUmbrella() {
-
-    }
 
 }
