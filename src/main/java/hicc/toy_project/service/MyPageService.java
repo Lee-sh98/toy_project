@@ -5,6 +5,7 @@ import hicc.toy_project.controller.dto.CommentResponse;
 import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.controller.dto.PostResponse;
 import hicc.toy_project.domain.member.Member;
+import hicc.toy_project.domain.member.Role;
 import hicc.toy_project.exception.CustomException;
 import hicc.toy_project.exception.ErrorCode;
 import hicc.toy_project.repository.CommentRepository;
@@ -23,6 +24,10 @@ public class MyPageService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+
+    private boolean isPresident(Member member) {
+        return member.getRole().equals(Role.PRESIDENT);
+    }
 
 
     @Transactional
@@ -62,5 +67,18 @@ public class MyPageService {
                 .stream()
                 .map(CommentResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public boolean withdraw(String id) {
+        Member withdrawalMember = memberRepository.findByIdNumber(id)
+                .orElseThrow(() ->
+                        new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+                );
+        if (isPresident(withdrawalMember)) {
+            throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
+        memberRepository.delete(withdrawalMember);
+        return true;
     }
 }
