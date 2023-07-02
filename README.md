@@ -46,6 +46,8 @@
     - `Member`와 관계를 갖는 `BOARD` 테이블의 존재
     - `Member`와 `BOARD`와 관계를 갖는 `COMMENT` 테이블의 존재
     - `BOARD`와 `COMMENT`는 R이 가능
+- 회원 탈퇴를 할 수 있다.
+  - `회장`은 탈퇴할 수 없다.
 
 ### 5. 어드민 페이지
 
@@ -61,7 +63,6 @@
 | 6    | 우산, 사물함 신청 조회  |                        | 회장, 임원진  |
 | 7    | 우산, 사물함 대여 처리  |                        | 회장, 임원진  |
 | 8    | 우산, 사물함 반납 처리  |                        | 회장, 임원진  |
-
 
 - '회장'은 회원 정보를 확인하고, 수정할 수 있다.
     - `Member`의 등급에는 `회장`이 존재
@@ -93,17 +94,18 @@
     - `회장` 또는 `임원진`등급의 사용자는 `APPLY_LOCKER`의 처리 여부 필드를 U할 수 있음
 
 ## DB
+
 #### **Member**
 
 | Member      | 자료형    | 비고  |
 |-------------|--------|-----|
-| id          | String | PK  |
+| id          | UUID   | PK  |
+| idNumber    | String |     |
 | role        | Role   |     |
 | nickName    | String |     |
 | phoneNumber | String |     |
 | major       | String |     |
 | photo       | String |     |
-
 
 | Role      | 설명   |
 |-----------|------|
@@ -112,20 +114,21 @@
 | GENERAL   | 부원   |
 | GRADUATE  | 졸업생  |
 | GUEST     | 비회원  |
+
 - 이름, 학번은?
 
 #### **DeletedMember**
 
-| Deleted_Member | 자료형            | 비고  |
-|----------------|----------------|-----|
-| id             | String         | PK  |
-| role           | Role           |     |
-| nickName       | String         |     |
-| phoneNumber    | String         |     |
-| major          | String         |     |
-| photo          | String         |     |
-| expelledDate   | LocalDateTime  |     |
-
+| Deleted_Member | 자료형           | 비고  |
+|----------------|---------------|-----|
+| id             | UUID          | PK  |
+| idNumber       | String        |     |
+| role           | Role          |     |
+| nickName       | String        |     |
+| phoneNumber    | String        |     |
+| major          | String        |     |
+| photo          | String        |     |
+| expelledDate   | LocalDateTime |     |
 
 #### **BOARD**
 
@@ -148,7 +151,6 @@
 | GRADUATE      | 졸업생게시판  |
 | MUST_EAT      | 맛집게시판   |
 
-
 #### **COMMENT**
 
 | COMMENT     | 자료형           | 비고  |
@@ -159,12 +161,15 @@
 | content     | String        |     |
 | writtenDate | LocalDateTime |     |
 
-
 #### **UMBRELLA**
-| Umbrella   | 자료형    | 비고  |
-|------------|--------|-----|
-| umbrellaId | String | PK  |
-| rent       | Rent   |     |
+
+| Umbrella     | 자료형            | 비고  |
+|--------------|----------------|-----|
+| umbrellaId   | String         | PK  |
+| rentalStatus | RentalStatus   |     |
+| lessor       | Member         | FK  |
+| rentalDate   | LocalDateTime  |     |
+
 
 | Rent         | 설명    |
 |--------------|-------|
@@ -172,17 +177,8 @@
 | OCCUPIED     | 사용중   |
 | UNAVAILABLE  | 사용불가  |
 
-
 - **LOCKER**
     - 사물함 id **(PK)**
-
-
-- **APPLY_UMBRELLA**
-    - 신청내역 id **(PK)**
-    - 우산 id (FK)
-    - 신청인 id (FK)
-    - 신청일
-    - 처리 여부
 
 
 - **APPLY_LOCKER**
