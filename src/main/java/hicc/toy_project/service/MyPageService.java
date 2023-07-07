@@ -35,6 +35,14 @@ public class MyPageService {
         );
     }
 
+    private void validatePresidentNeverWithdraw(Member withdrawalMember){
+        // 회장은 회원탈퇴를 할 수 없음
+
+        if (isPresident(withdrawalMember)){
+            throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
+    }
+
     @Transactional
     public Member memberInfo(String id) {
         return getMember(id);
@@ -71,9 +79,7 @@ public class MyPageService {
     public boolean withdraw(String id) {
         Member withdrawalMember = getMember(id);
 
-        if (isPresident(withdrawalMember)) {
-            throw new CustomException(ErrorCode.INVALID_REQUEST);
-        }
+        validatePresidentNeverWithdraw(withdrawalMember);
 
         memberRepository.delete(withdrawalMember);
         return true;
