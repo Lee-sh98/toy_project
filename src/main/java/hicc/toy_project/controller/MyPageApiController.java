@@ -1,9 +1,9 @@
 package hicc.toy_project.controller;
 
 import hicc.toy_project.controller.dto.CommentResponse;
+import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.controller.dto.PostResponse;
-import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class MyPageApiController {
      * @return Member
      */
     @GetMapping("/info")
-    public Member myPageInfo(@RequestBody MyPageRequest request) {
+    public MemberResponse myPageInfo(@RequestBody MyPageRequest request) {
         return myPageService.memberInfo(request.getId());
     }
 

@@ -2,9 +2,9 @@ package hicc.toy_project.service;
 
 
 import hicc.toy_project.controller.dto.CommentResponse;
+import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.controller.dto.PostResponse;
-import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.exception.CustomException;
 import hicc.toy_project.exception.ErrorCode;
 import hicc.toy_project.repository.CommentRepository;
@@ -26,10 +26,12 @@ public class MyPageService {
 
 
     @Transactional(readOnly = true)
-    public Member memberInfo(String id) {
-        return memberRepository.findByIdNumber(id).orElseThrow(() ->
-                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
-        );
+    public MemberResponse memberInfo(String id) {
+        return memberRepository.findByIdNumber(id)
+                .map(MemberResponse::new)
+                .orElseThrow(() ->
+                        new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+                );
     }
 
     @Transactional
