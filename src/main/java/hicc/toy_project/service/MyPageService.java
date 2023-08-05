@@ -25,7 +25,7 @@ public class MyPageService {
     private final CommentRepository commentRepository;
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Member memberInfo(String id) {
         return memberRepository.findByIdNumber(id).orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
@@ -41,7 +41,7 @@ public class MyPageService {
         );
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostResponse> myPost(String id) {
         if (memberRepository.findByIdNumber(id).isEmpty()) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
@@ -53,7 +53,7 @@ public class MyPageService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CommentResponse> myComment(String id) {
         if (memberRepository.findByIdNumber(id).isEmpty()) {
             throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);

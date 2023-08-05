@@ -40,7 +40,7 @@ public class AdminPageService {
     }
 
     // 모든 회원 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MemberResponse> members(String id) {
         if (!isPresident(id)) {
             throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
@@ -114,7 +114,7 @@ public class AdminPageService {
     }
 
     // 가입 승인 대기 목록 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MemberResponse> applicants(String id) {
         // 가입 승인 대기 목록 조회는 회장 또는 임원진만 가능
         if (!isPresident(id) && !isExecutive(id)) {
