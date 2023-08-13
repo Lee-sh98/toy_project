@@ -4,6 +4,8 @@ import hicc.toy_project.controller.dto.AdminPageRequest;
 import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.service.AdminPageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,5 +76,18 @@ public class AdminPageApiController {
         return adminPageService.approve(request);
     }
 
+    /**
+     * 회장 권한 위임
+     * 권한을 위임한 회장은 일반회원이 됨
+     * @param request {"id": [회장의 id],
+     *                "targetId": [차기 회장의 id]
+     *                }
+     * @return HttpStatus.OK의 ResponseEntity
+     */
+    @PostMapping("/delegate")
+    public ResponseEntity<Void> delegate(@RequestBody AdminPageRequest request){
+        adminPageService.delegate(request);
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
