@@ -1,8 +1,6 @@
 package hicc.toy_project.service;
 
-import hicc.toy_project.controller.dto.AdminPageRequest;
-import hicc.toy_project.controller.dto.ApproveRequest;
-import hicc.toy_project.controller.dto.MemberResponse;
+import hicc.toy_project.controller.dto.*;
 import hicc.toy_project.domain.member.DeletedMember;
 import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.domain.member.Role;
@@ -131,7 +129,7 @@ public class AdminPageService {
 
     // 가입 승인 처리
     @Transactional
-    public boolean approve(AdminPageRequest request) {
+    public ApproveResponse approve(AdminPageRequest request) {
         // 가입 승인 처리는 회장 또는 임원진만 가능
         if (!isPresident(request.getId()) && !isExecutive(request.getId())) {
             throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
@@ -146,16 +144,14 @@ public class AdminPageService {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
 
-        // 가입 거부 처리
-        if (request.getApproveRequest().equals(ApproveRequest.REJECT)) {
+        // 가입 거부
+        if (request.getApproveStatus().equals(ApproveStatus.REJECTED)) {
             memberRepository.delete(targetMember);
-            return true;
+            return new ApproveResponse(ApproveStatus.REJECTED);
         }
 
-        // 가입 승인 처리
-        if (request.getApproveRequest().equals(ApproveRequest.APPROVE)) {
-            return targetMember.updateRole(Role.GENERAL);
-        }
-        return false;
+        // 가입 승인
+        targetMember.updateRole(Role.GENERAL);
+        return new ApproveResponse(ApproveStatus.APPROVED);
     }
 }
