@@ -1,6 +1,7 @@
 package hicc.toy_project.controller;
 
 import hicc.toy_project.controller.dto.AdminPageRequest;
+import hicc.toy_project.controller.dto.ApproveResponse;
 import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.service.AdminPageService;
 import lombok.RequiredArgsConstructor;
@@ -70,7 +71,7 @@ public class AdminPageApiController {
      * @return 회원 승인 또는 거부 처리되면 True, 처리할 수 없으면 False
      */
     @PostMapping("/approve")
-    public boolean approve(@RequestBody AdminPageRequest request) {
+    public ApproveResponse approve(@RequestBody AdminPageRequest request) {
         return adminPageService.approve(request);
     }
 
