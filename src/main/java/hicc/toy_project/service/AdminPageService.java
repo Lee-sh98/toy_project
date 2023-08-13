@@ -55,6 +55,11 @@ public class AdminPageService {
     // 회원 정보(등급) 수정
     @Transactional
     public boolean changeRole(AdminPageRequest request) {
+
+        Member targetMember = memberRepository.findByIdNumber(request.getTargetId()).orElseThrow(() ->
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+
         // 요청자가 회장인지 확인
         if (!isPresident(request.getId())) {
             throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
@@ -76,9 +81,6 @@ public class AdminPageService {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
 
-        Member targetMember = memberRepository.findByIdNumber(request.getTargetId()).orElseThrow(() ->
-                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
-        );
 
         // 같은 등급으로 변경할 수 없음
         if (targetMember.getRole().equals(request.getRole())) {
