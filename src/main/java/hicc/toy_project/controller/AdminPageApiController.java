@@ -68,7 +68,7 @@ public class AdminPageApiController {
      * @param request {"id": [회장 또는 임원진의 id],
      *                "targetId": [승인 대상  id]
      *                "approveRequest": [APPROVE/ REJECT]}
-     * @return 회원 승인 또는 거부 처리되면 True, 처리할 수 없으면 False
+     * @return ApproveResponse
      */
     @PostMapping("/approve")
     public ApproveResponse approve(@RequestBody AdminPageRequest request) {
