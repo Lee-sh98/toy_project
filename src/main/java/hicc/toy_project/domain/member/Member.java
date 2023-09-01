@@ -43,4 +43,8 @@ public class Member extends MemberAbstract{
         this.setRole(role);
         return true;
     }
+
+    public boolean checkRole(Role role){
+        return this.getRole().equals(role);
+    }
 }
