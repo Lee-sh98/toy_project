@@ -18,7 +18,7 @@ public class MemberResponse {
     public MemberResponse(Member member){
         this.id = member.getIdNumber();
         this.role = member.getRole();
-        this.nickname = member.getNickName();
+        this.nickname = member.getNickname();
         this.major = member.getMajor();
         this.name = member.getName();
         this.phoneNumber = member.getPhoneNumber();

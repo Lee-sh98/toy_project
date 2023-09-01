@@ -11,7 +11,7 @@ public abstract class MemberAbstract {
     private String idNumber;
     private Role role;
     private String name;
-    private String nickName;
+    private String nickname;
     private String phoneNumber;
     private String major;
 
