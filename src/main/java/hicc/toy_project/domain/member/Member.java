@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.jpa.repository.Modifying;
 
 import java.util.UUID;
 
@@ -31,14 +30,14 @@ public class Member extends MemberAbstract{
         this.setPhoneNumber(phoneNumber);
     }
 
-    @Modifying(clearAutomatically = true)
+
     public boolean update(String nickName, String phoneNumber){
         this.setNickName(nickName);
         this.setPhoneNumber(phoneNumber);
         return true;
     }
 
-    @Modifying(clearAutomatically = true)
+
     public boolean updateRole(Role role){
         this.setRole(role);
         return true;
