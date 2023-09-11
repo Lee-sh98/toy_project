@@ -5,5 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public record ApproveResponse(ApproveStatus status) {
+public class ApproveResponse{
+    private  final ApproveStatus status;
+
 }
