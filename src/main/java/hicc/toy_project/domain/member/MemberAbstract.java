@@ -1,18 +1,21 @@
 package hicc.toy_project.domain.member;
 
 import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @MappedSuperclass
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class MemberAbstract {
 
 
-    private String idNumber;
-    private Role role;
-    private String nickName;
-    private String phoneNumber;
-    private String major;
+    protected String idNumber;
+    protected Role role;
+    protected String nickName;
+    protected String phoneNumber;
+    protected String major;
 
 
 }
