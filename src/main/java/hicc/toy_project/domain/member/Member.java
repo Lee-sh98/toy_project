@@ -3,17 +3,14 @@ package hicc.toy_project.domain.member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.jpa.repository.Modifying;
 
 import java.util.UUID;
 
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Member extends MemberAbstract{
 
@@ -25,22 +22,21 @@ public class Member extends MemberAbstract{
 
 
     @Builder
-    public Member(String id, String nickName, String phoneNumber){
-        this.setIdNumber(id);
-        this.setNickName(nickName);
-        this.setPhoneNumber(phoneNumber);
+    private Member(String id, String nickName, String phoneNumber, Role role){
+        super.idNumber = id;
+        super.nickName = nickName;
+        super.phoneNumber = phoneNumber;
+        super.role = role;
     }
 
-    @Modifying(clearAutomatically = true)
     public boolean update(String nickName, String phoneNumber){
-        this.setNickName(nickName);
-        this.setPhoneNumber(phoneNumber);
+        super.nickName = nickName;
+        super.phoneNumber = phoneNumber;
         return true;
     }
 
-    @Modifying(clearAutomatically = true)
     public boolean updateRole(Role role){
-        this.setRole(role);
+        super.role = role;
         return true;
     }
 }
