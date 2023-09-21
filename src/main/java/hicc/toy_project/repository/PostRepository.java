@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
-    List<Post> findAllByMember(Member chore);
+    List<Post> findAllByMember(Member member);
 }
