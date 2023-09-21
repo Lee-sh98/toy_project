@@ -6,6 +6,7 @@ import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.controller.dto.PostResponse;
 import hicc.toy_project.domain.member.Member;
+import hicc.toy_project.domain.member.Role;
 import hicc.toy_project.exception.CustomException;
 import hicc.toy_project.exception.ErrorCode;
 import hicc.toy_project.repository.CommentRepository;
@@ -26,11 +27,23 @@ public class MyPageService {
     private final CommentRepository commentRepository;
 
 
+    private boolean isPresident(Member member) {
+        return member.getRole().equals(Role.PRESIDENT);
+    }
+
     private Member getMember(String id) {
         return memberRepository.findByIdNumber(id)
                 .orElseThrow(() ->
                         new CustomException(ErrorCode.MEMBER_NOT_FOUND)
                 );
+    }
+
+    private void validatePresidentNeverWithdraw(Member withdrawalMember){
+        // 회장은 회원탈퇴를 할 수 없음
+
+        if (isPresident(withdrawalMember)){
+            throw new CustomException(ErrorCode.INVALID_REQUEST);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -46,9 +59,9 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> myPost(String id) {
-        getMember(id);
+        Member member = getMember(id);
 
-        return postRepository.findAllByMemberIdNumber(id)
+        return postRepository.findAllByMember(member)
                 .stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
@@ -56,11 +69,21 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<CommentResponse> myComment(String id) {
-        getMember(id);
+        Member member = getMember(id);
 
-        return commentRepository.findAllByMemberIdNumber(id)
+        return commentRepository.findAllByMember(member)
                 .stream()
                 .map(CommentResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public boolean withdraw(String id) {
+        Member withdrawalMember = getMember(id);
+
+        validatePresidentNeverWithdraw(withdrawalMember);
+
+        memberRepository.delete(withdrawalMember);
+        return true;
     }
 }
