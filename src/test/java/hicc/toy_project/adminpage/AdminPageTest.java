@@ -1,6 +1,7 @@
 package hicc.toy_project.adminpage;
 
 
+import hicc.toy_project.controller.dto.AdminPageRequest;
 import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.domain.member.Role;
 import hicc.toy_project.exception.CustomException;
@@ -47,11 +48,19 @@ public class AdminPageTest {
     void beforeEach() {
         status = transactionManager.getTransaction(new DefaultTransactionDefinition());
 
-        Member president = new Member(presidentId, "testPresident", "010");
-        Member testTarget = new Member(testTargetId, "testTarget", "011");
+        Member president = Member.builder()
+                .id(presidentId)
+                .nickName("testPresident")
+                .phoneNumber("010")
+                .role(Role.PRESIDENT)
+                .build();
 
-        president.setRole(Role.PRESIDENT);
-        testTarget.setRole(Role.GENERAL);
+        Member testTarget = Member.builder()
+                .id(testTargetId)
+                .nickName("testTarget")
+                .phoneNumber("011")
+                .role(Role.GENERAL)
+                .build();
 
         memberRepository.save(president);
         memberRepository.save(testTarget);
@@ -68,8 +77,12 @@ public class AdminPageTest {
         Member currentPresident = getMember(presidentId);
         Member nextPresident = getMember(testTargetId);
 
-        currentPresident.setRole(Role.GENERAL);
-        nextPresident.setRole(Role.PRESIDENT);
+        AdminPageRequest request = AdminPageRequest.builder()
+                .id(currentPresident.getIdNumber())
+                .targetId(nextPresident.getIdNumber())
+                .build();
+
+        adminPageService.delegate(request);
 
         Assertions.assertThat(currentPresident.getRole()).isEqualTo(Role.GENERAL);
         Assertions.assertThat(nextPresident.getRole()).isEqualTo(Role.PRESIDENT);
