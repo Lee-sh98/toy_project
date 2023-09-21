@@ -41,6 +41,21 @@ public class AdminPageService {
         }
     }
 
+    private boolean isPresident(Member member) {
+        return member.getRole().equals(Role.PRESIDENT);
+    }
+
+    private boolean isPresident(String id){
+        return isPresident(getMember(id));
+    }
+
+    private boolean isExecutive(Member member) {
+        return member.getRole().equals(Role.EXECUTIVE);
+    }
+
+    private boolean isExecutive(String id){
+        return isExecutive(getMember(id));
+    }
 
     // 모든 회원 조회
     @Transactional(readOnly = true)
