@@ -10,7 +10,8 @@ public abstract class MemberAbstract {
 
     private String idNumber;
     private Role role;
-    private String nickName;
+    private String name;
+    private String nickname;
     private String phoneNumber;
     private String major;
 

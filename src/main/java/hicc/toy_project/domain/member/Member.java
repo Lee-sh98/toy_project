@@ -27,13 +27,13 @@ public class Member extends MemberAbstract{
     @Builder
     public Member(String id, String nickName, String phoneNumber){
         this.setIdNumber(id);
-        this.setNickName(nickName);
+        this.setNickname(nickName);
         this.setPhoneNumber(phoneNumber);
     }
 
     @Modifying(clearAutomatically = true)
     public boolean update(String nickName, String phoneNumber){
-        this.setNickName(nickName);
+        this.setNickname(nickName);
         this.setPhoneNumber(phoneNumber);
         return true;
     }
