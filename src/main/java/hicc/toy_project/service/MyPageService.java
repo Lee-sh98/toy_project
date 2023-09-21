@@ -32,10 +32,9 @@ public class MyPageService {
     }
 
     private Member getMember(String id) {
-        return memberRepository.findByIdNumber(id)
-                .orElseThrow(() ->
-                        new CustomException(ErrorCode.MEMBER_NOT_FOUND)
-                );
+        return memberRepository.findByIdNumber(id).orElseThrow(() ->
+                    new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
     }
 
     private void validatePresidentNeverWithdraw(Member withdrawalMember){
