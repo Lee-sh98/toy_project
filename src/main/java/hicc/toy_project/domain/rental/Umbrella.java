@@ -18,6 +18,7 @@ public class Umbrella {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private UUID umbrellaId;
 
+    @Column(unique = true)
     private int umbrellaNumber;
 
     private RentalStatus rentalStatus;
