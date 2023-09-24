@@ -1,6 +1,6 @@
 package hicc.toy_project.service;
 
-import hicc.toy_project.controller.dto.request.rental.RentalRequest;
+import hicc.toy_project.controller.dto.request.rental.UmbrellaRentalRequest;
 import hicc.toy_project.controller.dto.response.rental.UmbrellaListResponse;
 import hicc.toy_project.controller.dto.response.rental.UmbrellaResponse;
 import hicc.toy_project.controller.dto.response.rental.UmbrellaSimpleResponse;
@@ -39,11 +39,12 @@ public class UmbrellaRentalService {
     }
 
 
-    public UmbrellaSimpleResponse rental(RentalRequest request) {
+    public UmbrellaSimpleResponse rental(UmbrellaRentalRequest request) {
         Member member = getEligibleMember(request.getLessorId());
 
-        Umbrella umbrella = getUmbrella(request.getTargetId());
+        Umbrella umbrella = getUmbrella(request.getUmbrellaNumber());
 
+        // 우산이 대여 가능한 상태인지 확인 후 대여처리
         validateUmbrellaStatus(umbrella, member);
         umbrella.rental(member);
 
@@ -52,9 +53,9 @@ public class UmbrellaRentalService {
                 .build();
     }
 
-    public UmbrellaSimpleResponse manageUmbrella(RentalRequest request) {
+    public UmbrellaSimpleResponse manageUmbrella(UmbrellaRentalRequest request) {
 
-        Umbrella umbrella = getUmbrella(request.getTargetId());
+        Umbrella umbrella = getUmbrella(request.getUmbrellaNumber());
 
         umbrella.updateStatus(request.getStatus());
 
@@ -64,8 +65,8 @@ public class UmbrellaRentalService {
     }
 
 
-    private Umbrella getUmbrella(String umbrellaId) {
-        return umbrellaRepository.findById(umbrellaId)
+    private Umbrella getUmbrella(int umbrellaNumber) {
+        return umbrellaRepository.findByUmbrellaNumber(umbrellaNumber)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REQUEST));
     }
 
