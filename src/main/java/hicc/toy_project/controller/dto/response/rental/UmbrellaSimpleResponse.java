@@ -14,8 +14,11 @@ import lombok.NoArgsConstructor;
 public class UmbrellaSimpleResponse {
     private int umbrellaNumber;
 
-    @Builder
-    protected UmbrellaSimpleResponse(int umbrellaId) {
-        this.umbrellaNumber = umbrellaId;
+    protected UmbrellaSimpleResponse(int umbrellaNumber) {
+        this.umbrellaNumber = umbrellaNumber;
+    }
+
+    public static UmbrellaSimpleResponse create(int umbrellaNumber) {
+        return new UmbrellaSimpleResponse(umbrellaNumber);
     }
 }

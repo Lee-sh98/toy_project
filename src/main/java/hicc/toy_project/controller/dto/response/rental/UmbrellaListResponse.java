@@ -14,9 +14,12 @@ public class UmbrellaListResponse {
     private int umbrellaCount;
     private List<UmbrellaResponse> umbrellas;
 
-    @Builder
     private UmbrellaListResponse(List<UmbrellaResponse> umbrellas) {
         this.umbrellaCount = umbrellas.size();
         this.umbrellas = umbrellas;
+    }
+
+    public static UmbrellaListResponse create(List<UmbrellaResponse> umbrellas) {
+        return new UmbrellaListResponse(umbrellas);
     }
 }
