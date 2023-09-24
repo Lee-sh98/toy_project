@@ -1,10 +1,7 @@
 package hicc.toy_project.domain.rental;
 
 import hicc.toy_project.domain.member.Member;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,8 +15,9 @@ public class Locker {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private UUID umbrellaId;
+    private UUID lockerId;
 
+    @Column(unique = true)
     private int lockerNumber;
 
     private RentalStatus rentalStatus;
@@ -30,14 +28,24 @@ public class Locker {
 
     private LocalDateTime rentalDate;
 
-    public void rental(Member member){
-        this.lessor = member;
-        this.rentalStatus = RentalStatus.OCCUPIED;
-        this.rentalDate = LocalDateTime.now();
 
+    public void rentLocker(Member member) {
+        this.lessor = member;
+        this.rentalStatus = RentalStatus.WAITING;
     }
 
-    public void updateStatus(RentalStatus status){
+    public void approveRental() {
+        this.rentalStatus = RentalStatus.OCCUPIED;
+        this.rentalDate = LocalDateTime.now();
+    }
+
+    public void rejectRental() {
+        this.lessor = null;
+        this.rentalStatus = RentalStatus.USABLE;
+        this.rentalDate = null;
+    }
+
+    public void updateStatus(RentalStatus status) {
         this.rentalStatus = status;
     }
 }
