@@ -5,12 +5,13 @@ import hicc.toy_project.domain.rental.RentalStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @NoArgsConstructor
-public class RentalRequest {
+public class UmbrellaRentalRequest {
 
     private String lessorId;
-    private String targetId;
+    private int umbrellaNumber;
     private RentalStatus status;
 
 }

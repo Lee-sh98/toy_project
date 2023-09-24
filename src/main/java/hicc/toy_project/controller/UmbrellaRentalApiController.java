@@ -1,6 +1,6 @@
 package hicc.toy_project.controller;
 
-import hicc.toy_project.controller.dto.request.rental.RentalRequest;
+import hicc.toy_project.controller.dto.request.rental.UmbrellaRentalRequest;
 import hicc.toy_project.controller.dto.response.rental.UmbrellaListResponse;
 import hicc.toy_project.controller.dto.response.rental.UmbrellaSimpleResponse;
 import hicc.toy_project.service.UmbrellaRentalService;
@@ -15,7 +15,7 @@ public class UmbrellaRentalApiController {
     private final UmbrellaRentalService umbrellaRentalService;
 
     @PostMapping
-    public UmbrellaSimpleResponse rental(@RequestBody RentalRequest request){
+    public UmbrellaSimpleResponse rental(@RequestBody UmbrellaRentalRequest request){
         String presidentId = "C011001";
         umbrellaRentalService.validatePresident(presidentId);
 
@@ -31,7 +31,7 @@ public class UmbrellaRentalApiController {
     }
 
     @PatchMapping
-    public UmbrellaSimpleResponse manageUmbrella(@RequestBody RentalRequest request){
+    public UmbrellaSimpleResponse manageUmbrella(@RequestBody UmbrellaRentalRequest request){
         String presidentId = "C011001";
         umbrellaRentalService.validatePresident(presidentId);
 
