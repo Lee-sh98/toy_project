@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RentalRequest {
 
+    private String lessorId;
     private String targetId;
     private RentalStatus status;
 
