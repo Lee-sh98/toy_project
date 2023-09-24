@@ -36,6 +36,12 @@ public class Umbrella {
 
     }
 
+    public void returnUmbrella() {
+        this.lessor = null;
+        this.rentalStatus = RentalStatus.USABLE;
+        this.rentalDate = null;
+    }
+
     public void updateStatus(RentalStatus status){
         this.rentalStatus = status;
     }
