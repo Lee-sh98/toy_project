@@ -9,17 +9,27 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/umbrella")
+@RequestMapping("/api/admin/umbrella")
 @RequiredArgsConstructor
 public class UmbrellaRentalApiController {
     private final UmbrellaRentalService umbrellaRentalService;
 
-    @PostMapping
+    /*
+    우산 대여하기 기능
+    개발을 위해 구현하였고 추후 제거 필요
+     */
+    @PatchMapping("rent")
     public UmbrellaSimpleResponse rental(@RequestBody UmbrellaRentalRequest request){
-        String presidentId = "C011001";
-        umbrellaRentalService.validatePresident(presidentId);
-
         return umbrellaRentalService.rental(request);
+    }
+
+    /*
+    우산 반납하기 기능
+    개발을 위해 구현하였고 추후 제거 필요
+     */
+    @PatchMapping("return")
+    public UmbrellaSimpleResponse returnUmbrella(@RequestBody UmbrellaRentalRequest request) {
+        return umbrellaRentalService.returnUmbrella(request);
     }
 
     @GetMapping
