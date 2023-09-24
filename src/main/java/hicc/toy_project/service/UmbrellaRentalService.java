@@ -27,9 +27,7 @@ public class UmbrellaRentalService {
 
 
     @Transactional(readOnly = true)
-    public UmbrellaListResponse umbrellaList(String memberId) {
-        validateEligibleMember(memberId);
-
+    public UmbrellaListResponse umbrellaList() {
         List<UmbrellaResponse> umbrellas = umbrellaRepository.findAll()
                 .stream()
                 .map(UmbrellaResponse::new)
@@ -41,12 +39,12 @@ public class UmbrellaRentalService {
     }
 
 
-    public UmbrellaSimpleResponse rental(String memberId, RentalRequest request) {
-        Member member = getEligibleMember(memberId);
+    public UmbrellaSimpleResponse rental(RentalRequest request) {
+        Member member = getEligibleMember(request.getLessorId());
 
         Umbrella umbrella = getUmbrella(request.getTargetId());
 
-        checkUmbrellaStatus(umbrella, member);
+        validateUmbrellaStatus(umbrella, member);
         umbrella.rental(member);
 
         return UmbrellaSimpleResponse.builder()
@@ -54,8 +52,7 @@ public class UmbrellaRentalService {
                 .build();
     }
 
-    public UmbrellaSimpleResponse manageUmbrella(String memberId, RentalRequest request) {
-        validateEligibleMember(memberId);
+    public UmbrellaSimpleResponse manageUmbrella(RentalRequest request) {
 
         Umbrella umbrella = getUmbrella(request.getTargetId());
 
@@ -67,9 +64,9 @@ public class UmbrellaRentalService {
     }
 
 
-    private Umbrella getUmbrella(String umbrellaId){
+    private Umbrella getUmbrella(String umbrellaId) {
         return umbrellaRepository.findById(umbrellaId)
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_REQUEST));
+                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REQUEST));
     }
 
     private boolean isEligible(Role role) {
@@ -77,7 +74,7 @@ public class UmbrellaRentalService {
                 .contains(role);
     }
 
-    private void checkUmbrellaStatus(Umbrella umbrella, Member member) {
+    private void validateUmbrellaStatus(Umbrella umbrella, Member member) {
         if (!umbrella.getRentalStatus().equals(RentalStatus.USABLE)) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
@@ -99,19 +96,18 @@ public class UmbrellaRentalService {
     private Member getEligibleMember(String memberId) {
         Member member = getMember(memberId);
 
-        validateEligibleMember(memberId);
+        if (!isEligible(member.getRole())) {
+            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
+        }
 
         return member;
     }
 
-    private void validateEligibleMember(Member member) {
+    public void validatePresident(String presidentId) {
+        Member president = getMember(presidentId);
 
-        if (!isEligible(member.getRole())) {
+        if (!president.getRole().equals(Role.PRESIDENT)) {
             throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
         }
-    }
-
-    private void validateEligibleMember(String memberId) {
-        validateEligibleMember(getMember(memberId));
     }
 }

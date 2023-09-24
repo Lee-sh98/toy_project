@@ -16,22 +16,25 @@ public class UmbrellaRentalApiController {
 
     @PostMapping
     public UmbrellaSimpleResponse rental(@RequestBody RentalRequest request){
-        String memberId = "C011225";
+        String presidentId = "C011001";
+        umbrellaRentalService.validatePresident(presidentId);
 
-        return umbrellaRentalService.rental(memberId, request);
+        return umbrellaRentalService.rental(request);
     }
 
     @GetMapping
     public UmbrellaListResponse rentalList(){
-        String memberId = "C011225";
+        String presidentId = "C011001";
+        umbrellaRentalService.validatePresident(presidentId);
 
-        return umbrellaRentalService.umbrellaList(memberId);
+        return umbrellaRentalService.umbrellaList();
     }
 
     @PatchMapping
     public UmbrellaSimpleResponse manageUmbrella(@RequestBody RentalRequest request){
-        String memberId = "C011001";
+        String presidentId = "C011001";
+        umbrellaRentalService.validatePresident(presidentId);
 
-        return umbrellaRentalService.manageUmbrella(memberId, request);
+        return umbrellaRentalService.manageUmbrella(request);
     }
 }
