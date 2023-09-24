@@ -33,9 +33,7 @@ public class UmbrellaRentalService {
                 .map(UmbrellaResponse::new)
                 .toList();
 
-        return UmbrellaListResponse.builder()
-                .umbrellas(umbrellas)
-                .build();
+        return UmbrellaListResponse.create(umbrellas);
     }
 
 
@@ -48,9 +46,19 @@ public class UmbrellaRentalService {
         validateUmbrellaStatus(umbrella, member);
         umbrella.rental(member);
 
-        return UmbrellaSimpleResponse.builder()
-                .umbrellaId(umbrella.getUmbrellaNumber())
-                .build();
+        return UmbrellaSimpleResponse.create(umbrella.getUmbrellaNumber());
+    }
+
+    public UmbrellaSimpleResponse returnUmbrella(UmbrellaRentalRequest request) {
+        Member member = getEligibleMember(request.getLessorId());
+
+        Umbrella umbrella = getUmbrella(request.getUmbrellaNumber());
+        if (!umbrella.getLessor().equals(member)) {
+            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
+        }
+        umbrella.returnUmbrella();
+
+        return UmbrellaSimpleResponse.create(umbrella.getUmbrellaNumber());
     }
 
     public UmbrellaSimpleResponse manageUmbrella(UmbrellaRentalRequest request) {
@@ -59,9 +67,7 @@ public class UmbrellaRentalService {
 
         umbrella.updateStatus(request.getStatus());
 
-        return UmbrellaSimpleResponse.builder()
-                .umbrellaId(umbrella.getUmbrellaNumber())
-                .build();
+        return UmbrellaSimpleResponse.create(umbrella.getUmbrellaNumber());
     }
 
 
