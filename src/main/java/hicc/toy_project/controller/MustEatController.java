@@ -1,6 +1,7 @@
 package hicc.toy_project.controller;
 
 import hicc.toy_project.controller.dto.request.mustEat.MustEatCreateRequest;
+import hicc.toy_project.controller.dto.response.mustEat.MustEatListResponse;
 import hicc.toy_project.controller.dto.response.mustEat.MustEatResponse;
 import hicc.toy_project.service.MustEatService;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,11 @@ public class MustEatController {
     public MustEatResponse create(@RequestBody MustEatCreateRequest request) {
 
         return mustEatService.create(request);
+    }
+
+    @GetMapping
+    public MustEatListResponse listMustEat() {
+
+        return mustEatService.listMustEat();
     }
 }
