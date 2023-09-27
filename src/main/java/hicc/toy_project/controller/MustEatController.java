@@ -4,6 +4,7 @@ import hicc.toy_project.controller.dto.request.mustEat.MustEatCreateRequest;
 import hicc.toy_project.controller.dto.request.mustEat.ReviewCreateRequest;
 import hicc.toy_project.controller.dto.response.mustEat.MustEatListResponse;
 import hicc.toy_project.controller.dto.response.mustEat.MustEatResponse;
+import hicc.toy_project.controller.dto.response.mustEat.ReviewListResponse;
 import hicc.toy_project.controller.dto.response.mustEat.ReviewResponse;
 import hicc.toy_project.service.MustEatService;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,11 @@ public class MustEatController {
                                        @RequestBody ReviewCreateRequest request) {
         String memberId = "C011001";
         return mustEatService.writeReview(mustEatId, memberId, request);
+    }
+
+    @GetMapping("/{must-eat-id}")
+    public ReviewListResponse listReview(@PathVariable("must-eat-id") Long mustEatId) {
+        return mustEatService.listReview(mustEatId);
+
     }
 }
