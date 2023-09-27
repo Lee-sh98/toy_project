@@ -1,14 +1,17 @@
 package hicc.toy_project.domain.mustEat;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MustEat {
 
     @Id
@@ -16,13 +19,13 @@ public class MustEat {
     private Long id;
 
     @Column(nullable = false)
-    private final String name;
+    private String name;
 
     @Column(nullable = false)
-    private final String lat;
+    private String lat;
 
     @Column(nullable = false)
-    private final String lng;
+    private String lng;
 
     @OneToMany(mappedBy = "mustEat")
     private List<Review> reviews = new ArrayList<>();
@@ -37,7 +40,6 @@ public class MustEat {
     public Long getScore() {
 
         if (reviews.isEmpty()) {
-            System.out.println();
             return 0L;
         }
 
