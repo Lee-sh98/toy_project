@@ -5,6 +5,7 @@ import hicc.toy_project.controller.dto.request.mustEat.MustEatCreateRequest;
 import hicc.toy_project.controller.dto.request.mustEat.ReviewCreateRequest;
 import hicc.toy_project.controller.dto.response.mustEat.MustEatListResponse;
 import hicc.toy_project.controller.dto.response.mustEat.MustEatResponse;
+import hicc.toy_project.controller.dto.response.mustEat.ReviewListResponse;
 import hicc.toy_project.controller.dto.response.mustEat.ReviewResponse;
 import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.domain.mustEat.MustEat;
@@ -74,4 +75,17 @@ public class MustEatService {
     }
 
 
+    public ReviewListResponse listReview(Long mustEatId) {
+
+        List<ReviewResponse> responses = reviewRepository.findAllByMustEatId(mustEatId).stream()
+                .map(ReviewResponse::create)
+                .toList();
+
+        String name = mustEatRepository
+                .findById(mustEatId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND))
+                .getName();
+
+        return ReviewListResponse.create(responses, name);
+    }
 }
