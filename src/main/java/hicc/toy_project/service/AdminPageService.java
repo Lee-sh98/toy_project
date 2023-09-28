@@ -164,14 +164,15 @@ public class AdminPageService {
                         new CustomException(ErrorCode.MEMBER_NOT_FOUND)
                 );
 
+        if (!isPresident(request.getId())) {
+            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
+        }
+
         Member nextPresident = memberRepository.findByIdNumber(request.getTargetId())
                 .orElseThrow(() ->
                         new CustomException(ErrorCode.MEMBER_NOT_FOUND)
                 );
 
-        if (!isPresident(request.getId())) {
-            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
-        }
 
         currentPresident.updateRole(Role.GENERAL);
         nextPresident.updateRole(Role.PRESIDENT);
