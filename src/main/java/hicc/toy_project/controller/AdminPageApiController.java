@@ -5,12 +5,14 @@ import hicc.toy_project.controller.dto.ApproveResponse;
 import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.service.AdminPageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/admin")
+@ResponseStatus(HttpStatus.ACCEPTED)
 @RequiredArgsConstructor
 public class AdminPageApiController {
     private final AdminPageService adminPageService;
@@ -23,6 +25,7 @@ public class AdminPageApiController {
      * @return List of Members
      */
     @GetMapping("/members")
+    @ResponseStatus(HttpStatus.OK)
     public List<MemberResponse> members(@RequestBody AdminPageRequest request) {
         return adminPageService.members(request.getId());
     }
@@ -59,6 +62,7 @@ public class AdminPageApiController {
      * @return 가입 승인 대기중인 회원 리스트
      */
     @GetMapping("/applicants")
+    @ResponseStatus(HttpStatus.OK)
     public List<MemberResponse> applicants(@RequestBody AdminPageRequest request) {
         return adminPageService.applicants(request.getId());
     }
