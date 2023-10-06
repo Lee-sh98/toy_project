@@ -21,7 +21,7 @@ public class UmbrellaRentalApiController {
     @PatchMapping("/rent")
     public UmbrellaSimpleResponse rental(@RequestBody UmbrellaRentalRequest request) {
 
-        return umbrellaRentalService.rental(request);
+        return umbrellaRentalService.rentUmbrella(request);
     }
 
     /*
@@ -36,13 +36,13 @@ public class UmbrellaRentalApiController {
     @GetMapping
     public UmbrellaListResponse rentalList(@RequestParam("id") String id) {
 
-        return umbrellaRentalService.umbrellaList(id);
+        return umbrellaRentalService.listUmbrella(id);
     }
 
     @PatchMapping("/update-status")
     public UmbrellaSimpleResponse updateStatus(@RequestParam("id") String id,
                                                  @RequestBody UmbrellaRentalRequest request) {
 
-        return umbrellaRentalService.updateStatus(id, request);
+        return umbrellaRentalService.updateUmbrellaStatus(id, request);
     }
 }
