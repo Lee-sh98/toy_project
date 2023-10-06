@@ -65,10 +65,14 @@ public class MyPageApiController {
     }
 
 
-    @GetMapping("/{id}/rental")
-    public String myPageRental() {
-
-        return "rentals";
+    /**
+     * 회원 탈퇴를 할 수 있다.
+     * @param request Body 부분에 Member Id를 넣어야한다.
+     *                EX) {"id": "X011001"}
+     */
+    @PostMapping("/withdraw")
+    public boolean withdraw(@RequestBody MyPageRequest request){
+        return myPageService.withdraw(request.getId());
     }
 
 
