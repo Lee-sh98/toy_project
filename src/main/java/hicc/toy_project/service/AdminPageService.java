@@ -160,4 +160,25 @@ public class AdminPageService {
         }
         return false;
     }
+
+    @Transactional
+    public void delegate(AdminPageRequest request) {
+        Member currentPresident = memberRepository.findByIdNumber(request.getId())
+                .orElseThrow(() ->
+                        new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+                );
+
+        if (!isPresident(request.getId())) {
+            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
+        }
+
+        Member nextPresident = memberRepository.findByIdNumber(request.getTargetId())
+                .orElseThrow(() ->
+                        new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+                );
+
+
+        currentPresident.updateRole(Role.GENERAL);
+        nextPresident.updateRole(Role.PRESIDENT);
+    }
 }

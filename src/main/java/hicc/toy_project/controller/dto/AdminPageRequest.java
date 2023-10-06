@@ -1,23 +1,28 @@
 package hicc.toy_project.controller.dto;
 
-import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.domain.member.Role;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AdminPageRequest {
     private String id;
     private String targetId;
     private Role role;
     private ApproveRequest approveRequest;
 
+
     @Builder
-    public Member toEntity() {
-        return Member.builder()
-                .id(id)
-                .build();
+    private AdminPageRequest(String id,
+                             String targetId,
+                             Role role,
+                             ApproveRequest approveRequest){
+        this.id = id;
+        this.targetId = targetId;
+        this.role = role;
+        this.approveRequest = approveRequest;
     }
 }
