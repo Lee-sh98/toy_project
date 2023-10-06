@@ -8,7 +8,6 @@ import hicc.toy_project.exception.CustomException;
 import hicc.toy_project.exception.ErrorCode;
 import hicc.toy_project.service.LockerRentalService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,24 +29,22 @@ public class LockerRentalApiController {
 
     // 사물함 대여 현황 조회
     @GetMapping
-    public LockerListResponse listLocker() {
-        String presidentId = "C011001";
-        lockerRentalService.validatePresident(presidentId);
+    public LockerListResponse listLocker(@RequestParam("id") String id) {
 
-        return lockerRentalService.listLocker();
+        return lockerRentalService.listLocker(id);
     }
 
     // 사물함 대여 승인/거부
     @PatchMapping
-    public LockerSimpleResponse processRental(@RequestParam("status") String status, @RequestBody LockerRentalRequest request) {
-        String presidentId = "C011001";
-        lockerRentalService.validatePresident(presidentId);
+    public LockerSimpleResponse processRental(@RequestParam("id") String id,
+                                              @RequestParam("status") String status,
+                                              @RequestBody LockerRentalRequest request) {
 
         if (status.equals("approve")) {
-            return lockerRentalService.approveRental(request);
+            return lockerRentalService.approveRental(id, request);
         }
         if (status.equals("reject")) {
-            return lockerRentalService.rejectRental(request);
+            return lockerRentalService.rejectRental(id, request);
         }
 
         throw new CustomException(ErrorCode.INVALID_REQUEST);

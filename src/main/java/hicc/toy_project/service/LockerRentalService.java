@@ -36,7 +36,9 @@ public class LockerRentalService {
     }
 
     @Transactional(readOnly = true)
-    public LockerListResponse listLocker() {
+    public LockerListResponse listLocker(String id) {
+        validateMandated(id);
+
         List<LockerResponse> lockers = lockerRepository.findAll()
                 .stream()
                 .map(LockerResponse::new)
@@ -45,7 +47,10 @@ public class LockerRentalService {
         return LockerListResponse.create(lockers);
     }
 
-    public LockerSimpleResponse manageLocker(LockerRentalRequest request) {
+    public LockerSimpleResponse updateStatus(String id, LockerRentalRequest request) {
+
+        validatePresident(id);
+
         Locker locker = getLocker(request.getLockerNumber());
 
         locker.updateStatus(request.getStatus());
@@ -53,7 +58,10 @@ public class LockerRentalService {
         return LockerSimpleResponse.create(locker.getLockerNumber());
     }
 
-    public LockerSimpleResponse approveRental(LockerRentalRequest request) {
+    public LockerSimpleResponse approveRental(String id, LockerRentalRequest request) {
+
+        validateMandated(id);
+
         Locker locker = getLocker(request.getLockerNumber());
 
         locker.approveRental();
@@ -61,7 +69,10 @@ public class LockerRentalService {
         return LockerSimpleResponse.create(locker.getLockerNumber());
     }
 
-    public LockerSimpleResponse rejectRental(LockerRentalRequest request) {
+    public LockerSimpleResponse rejectRental(String id, LockerRentalRequest request) {
+
+        validateMandated(id);
+
         Locker locker = getLocker(request.getLockerNumber());
 
         locker.rejectRental();
@@ -81,7 +92,7 @@ public class LockerRentalService {
     }
 
 
-    public void validatePresident(String presidentId) {
+    private void validatePresident(String presidentId) {
         Member president = getMember(presidentId);
 
         if (!president.getRole().equals(Role.PRESIDENT)) {
@@ -89,7 +100,18 @@ public class LockerRentalService {
         }
     }
 
-    public void validateEligibleMember(String memberId) {
+    private void validateMandated(String memberId) {
+        Member member = getMember(memberId);
+
+        boolean isMandated = List.of(Role.PRESIDENT, Role.EXECUTIVE)
+                .contains(member.getRole());
+
+        if (!isMandated) {
+            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
+        }
+    }
+
+    private void validateEligibleMember(String memberId) {
         Member member = getMember(memberId);
 
         boolean isMember = List.of(Role.PRESIDENT, Role.EXECUTIVE, Role.GENERAL)

@@ -27,7 +27,10 @@ public class UmbrellaRentalService {
 
 
     @Transactional(readOnly = true)
-    public UmbrellaListResponse umbrellaList() {
+    public UmbrellaListResponse umbrellaList(String id) {
+
+        validatePresident(id);
+
         List<UmbrellaResponse> umbrellas = umbrellaRepository.findAll()
                 .stream()
                 .map(UmbrellaResponse::new)
@@ -61,7 +64,9 @@ public class UmbrellaRentalService {
         return UmbrellaSimpleResponse.create(umbrella.getUmbrellaNumber());
     }
 
-    public UmbrellaSimpleResponse manageUmbrella(UmbrellaRentalRequest request) {
+    public UmbrellaSimpleResponse updateStatus(String id, UmbrellaRentalRequest request) {
+
+        validatePresident(id);
 
         Umbrella umbrella = getUmbrella(request.getUmbrellaNumber());
 
