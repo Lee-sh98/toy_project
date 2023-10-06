@@ -27,6 +27,7 @@ public class Member extends MemberAbstract{
         super.nickName = nickName;
         super.phoneNumber = phoneNumber;
         super.role = role;
+
     }
 
     public boolean update(String nickName, String phoneNumber){
