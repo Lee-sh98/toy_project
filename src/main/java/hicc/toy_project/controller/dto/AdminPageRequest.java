@@ -16,8 +16,9 @@ public class AdminPageRequest {
 
 
     @Builder
-    private AdminPageRequest(String id, String targetId){
+    private AdminPageRequest(String id, String targetId, Role role){
         this.id = id;
         this.targetId = targetId;
+        this.role = role;
     }
 }
