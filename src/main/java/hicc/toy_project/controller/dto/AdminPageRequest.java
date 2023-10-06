@@ -16,9 +16,13 @@ public class AdminPageRequest {
 
 
     @Builder
-    private AdminPageRequest(String id, String targetId, Role role){
+    private AdminPageRequest(String id,
+                             String targetId,
+                             Role role,
+                             ApproveRequest approveRequest){
         this.id = id;
         this.targetId = targetId;
         this.role = role;
+        this.approveRequest = approveRequest;
     }
 }
