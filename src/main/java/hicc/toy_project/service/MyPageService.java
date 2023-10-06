@@ -58,9 +58,8 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> myPost(String id) {
-        Member member = getMember(id);
 
-        return postRepository.findAllByMember(member)
+        return postRepository.findAllByMemberIdNumber(id)
                 .stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
@@ -68,9 +67,8 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<CommentResponse> myComment(String id) {
-        Member member = getMember(id);
 
-        return commentRepository.findAllByMember(member)
+        return commentRepository.findAllByMemberIdNumber(id)
                 .stream()
                 .map(CommentResponse::new)
                 .collect(Collectors.toList());
