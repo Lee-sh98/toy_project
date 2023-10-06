@@ -21,8 +21,8 @@ public class LockerRentalApiController {
     사물함 대여하기 기능
     개발을 위해 구현하였고 추후 제거 필요
      */
+    @PatchMapping("/rent")
     public LockerSimpleResponse rentLocker(@RequestBody LockerRentalRequest request) {
-        lockerRentalService.validateEligibleMember(request.getLessorId());
 
         return lockerRentalService.rentLocker(request);
     }
@@ -52,12 +52,11 @@ public class LockerRentalApiController {
 
 
     // 사물함 관리
-    @PatchMapping("/manage")
-    public LockerSimpleResponse manageLocker(@RequestBody LockerRentalRequest request) {
-        String presidentId = "C011001";
-        lockerRentalService.validatePresident(presidentId);
+    @PatchMapping("/update-status")
+    public LockerSimpleResponse updateStatus(@RequestParam("id") String id,
+                                             @RequestBody LockerRentalRequest request) {
 
-        return lockerRentalService.manageLocker(request);
+        return lockerRentalService.updateStatus(id, request);
     }
 
 }

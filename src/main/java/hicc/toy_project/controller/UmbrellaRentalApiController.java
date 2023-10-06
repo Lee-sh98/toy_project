@@ -18,8 +18,9 @@ public class UmbrellaRentalApiController {
     우산 대여하기 기능
     개발을 위해 구현하였고 추후 제거 필요
      */
-    @PatchMapping("rent")
-    public UmbrellaSimpleResponse rental(@RequestBody UmbrellaRentalRequest request){
+    @PatchMapping("/rent")
+    public UmbrellaSimpleResponse rental(@RequestBody UmbrellaRentalRequest request) {
+
         return umbrellaRentalService.rental(request);
     }
 
@@ -27,7 +28,7 @@ public class UmbrellaRentalApiController {
     우산 반납하기 기능
     개발을 위해 구현하였고 추후 제거 필요
      */
-    @PatchMapping("return")
+    @PatchMapping("/return")
     public UmbrellaSimpleResponse returnUmbrella(@RequestBody UmbrellaRentalRequest request) {
         return umbrellaRentalService.returnUmbrella(request);
     }
@@ -38,8 +39,8 @@ public class UmbrellaRentalApiController {
         return umbrellaRentalService.umbrellaList(id);
     }
 
-    @PatchMapping
-    public UmbrellaSimpleResponse manageUmbrella(@RequestParam("id") String id,
+    @PatchMapping("/update-status")
+    public UmbrellaSimpleResponse updateStatus(@RequestParam("id") String id,
                                                  @RequestBody UmbrellaRentalRequest request) {
 
         return umbrellaRentalService.updateStatus(id, request);
