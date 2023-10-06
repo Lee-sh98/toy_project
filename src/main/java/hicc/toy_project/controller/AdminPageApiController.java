@@ -1,15 +1,18 @@
 package hicc.toy_project.controller;
 
 import hicc.toy_project.controller.dto.AdminPageRequest;
+import hicc.toy_project.controller.dto.ApproveResponse;
 import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.service.AdminPageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/admin")
+@ResponseStatus(HttpStatus.ACCEPTED)
 @RequiredArgsConstructor
 public class AdminPageApiController {
     private final AdminPageService adminPageService;
@@ -22,6 +25,7 @@ public class AdminPageApiController {
      * @return List of Members
      */
     @GetMapping("/members")
+    @ResponseStatus(HttpStatus.OK)
     public List<MemberResponse> members(@RequestBody AdminPageRequest request) {
         return adminPageService.members(request.getId());
     }
@@ -58,6 +62,7 @@ public class AdminPageApiController {
      * @return 가입 승인 대기중인 회원 리스트
      */
     @GetMapping("/applicants")
+    @ResponseStatus(HttpStatus.OK)
     public List<MemberResponse> applicants(@RequestBody AdminPageRequest request) {
         return adminPageService.applicants(request.getId());
     }
@@ -67,10 +72,10 @@ public class AdminPageApiController {
      * @param request {"id": [회장 또는 임원진의 id],
      *                "targetId": [승인 대상  id]
      *                "approveRequest": [APPROVE/ REJECT]}
-     * @return 회원 승인 또는 거부 처리되면 True, 처리할 수 없으면 False
+     * @return ApproveResponse
      */
     @PostMapping("/approve")
-    public boolean approve(@RequestBody AdminPageRequest request) {
+    public ApproveResponse approve(@RequestBody AdminPageRequest request) {
         return adminPageService.approve(request);
     }
 

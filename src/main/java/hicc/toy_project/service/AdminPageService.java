@@ -1,8 +1,6 @@
 package hicc.toy_project.service;
 
-import hicc.toy_project.controller.dto.AdminPageRequest;
-import hicc.toy_project.controller.dto.ApproveRequest;
-import hicc.toy_project.controller.dto.MemberResponse;
+import hicc.toy_project.controller.dto.*;
 import hicc.toy_project.domain.member.DeletedMember;
 import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.domain.member.Role;
@@ -30,6 +28,19 @@ public class AdminPageService {
                 );
     }
 
+    private void validateMandated(String id) {
+        Member member = getMember(id);
+        if (!member.checkRole(Role.PRESIDENT) && !member.checkRole(Role.EXECUTIVE)) {
+            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
+        }
+    }
+
+    private void validatePresident(String id) {
+        if (!getMember(id).checkRole(Role.PRESIDENT)) {
+            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
+        }
+    }
+
     private boolean isPresident(Member member) {
         return member.getRole().equals(Role.PRESIDENT);
     }
@@ -47,12 +58,9 @@ public class AdminPageService {
     }
 
     // 모든 회원 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MemberResponse> members(String id) {
-        Member member = getMember(id);
-        if (!isPresident(member)) {
-            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
-        }
+        validatePresident(id);
 
         return memberRepository.findAll()
                 .stream()
@@ -63,10 +71,11 @@ public class AdminPageService {
     // 회원 정보(등급) 수정
     @Transactional
     public boolean changeRole(AdminPageRequest request) {
-        // 요청자가 회장인지 확인
-        if (!isPresident(getMember(request.getId()))) {
-            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
-        }
+
+        validatePresident(request.getId());
+
+        // 타겟 멤버 조회
+        Member targetMember = getMember(request.getTargetId());
 
         // 회장 자기자신은 U 불가능
         // id == targetId 인 경우
@@ -84,13 +93,12 @@ public class AdminPageService {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
 
-        // 타겟 멤버 조회
-        Member targetMember = getMember(request.getTargetId());
 
         // 같은 등급으로 변경할 수 없음
         if (targetMember.getRole().equals(request.getRole())) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
+
 
         return targetMember.updateRole(request.getRole());
     }
@@ -98,18 +106,13 @@ public class AdminPageService {
     //회원 제명
     @Transactional
     public boolean expel(AdminPageRequest request) {
-        // 요청자가 회장인지 확인
-        if (!isPresident(request.getId())) {
-            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
-        }
+        validatePresident(request.getId());
 
+        Member expelledMember = getMember(request.getTargetId());
         // 회장 자기 자신을 제명할 수 없음
-        if (isPresident(request.getTargetId())) {
+        if (expelledMember.checkRole(Role.PRESIDENT)) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
-
-        // 타겟 id가 DB에 존재하는지 확인
-        Member expelledMember = getMember(request.getTargetId());
 
         DeletedMember deletedMember = new DeletedMember(expelledMember);
         deletedMemberRepository.save(deletedMember);
@@ -119,12 +122,10 @@ public class AdminPageService {
     }
 
     // 가입 승인 대기 목록 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MemberResponse> applicants(String id) {
         // 가입 승인 대기 목록 조회는 회장 또는 임원진만 가능
-        if (!isPresident(id) && !isExecutive(id)) {
-            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
-        }
+        validateMandated(id);
 
         return memberRepository.findAll()
                 .stream()
@@ -135,29 +136,25 @@ public class AdminPageService {
 
     // 가입 승인 처리
     @Transactional
-    public boolean approve(AdminPageRequest request) {
+    public ApproveResponse approve(AdminPageRequest request) {
         // 가입 승인 처리는 회장 또는 임원진만 가능
-        if (!isPresident(request.getId()) && !isExecutive(request.getId())) {
-            throw new CustomException(ErrorCode.REQUEST_NOT_PERMITTED);
-        }
+        validateMandated(request.getId());
 
         // 타겟 id가 게스트인지 확인
         Member targetMember = getMember(request.getTargetId());
-
-        if (!targetMember.getRole().equals(Role.GUEST)) {
+        if (!targetMember.checkRole(Role.GUEST)) {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
 
-        // 가입 거부 처리
-        if (request.getApproveRequest().equals(ApproveRequest.REJECT)) {
+        // 가입 승인
+        if (request.getApproveStatus().equals(ApproveStatus.APPROVED)) {
+            targetMember.updateRole(Role.GENERAL);
+        }
+        // 가입 거부
+        else {
             memberRepository.delete(targetMember);
-            return true;
         }
 
-        // 가입 승인 처리
-        if (request.getApproveRequest().equals(ApproveRequest.APPROVE)) {
-            return targetMember.updateRole(Role.GENERAL);
-        }
-        return false;
+        return new ApproveResponse(request.getApproveStatus());
     }
 }

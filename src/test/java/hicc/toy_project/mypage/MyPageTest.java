@@ -1,5 +1,6 @@
 package hicc.toy_project.mypage;
 
+import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.domain.member.Member;
 import hicc.toy_project.domain.member.Role;
 import hicc.toy_project.exception.CustomException;
@@ -52,8 +53,8 @@ public class MyPageTest {
     @Test
     @DisplayName("내_정보_조회")
     void memberInfoTest() {
-        Member foundMember = myPageService.memberInfo(id);
-        Assertions.assertThat(foundMember.getIdNumber()).isEqualTo(id);
+        MemberResponse foundMember = myPageService.memberInfo(id);
+        Assertions.assertThat(foundMember.getId()).isEqualTo(id);
     }
 
     @Test

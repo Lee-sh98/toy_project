@@ -2,6 +2,7 @@ package hicc.toy_project.service;
 
 
 import hicc.toy_project.controller.dto.CommentResponse;
+import hicc.toy_project.controller.dto.MemberResponse;
 import hicc.toy_project.controller.dto.MyPageRequest;
 import hicc.toy_project.controller.dto.PostResponse;
 import hicc.toy_project.domain.member.Member;
@@ -25,13 +26,14 @@ public class MyPageService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
+
     private boolean isPresident(Member member) {
         return member.getRole().equals(Role.PRESIDENT);
     }
 
     private Member getMember(String id) {
         return memberRepository.findByIdNumber(id).orElseThrow(() ->
-                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+                    new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
     }
 
@@ -43,33 +45,30 @@ public class MyPageService {
         }
     }
 
-    @Transactional
-    public Member memberInfo(String id) {
-        return getMember(id);
+    @Transactional(readOnly = true)
+    public MemberResponse memberInfo(String id) {
+        return new MemberResponse(getMember(id));
     }
 
     @Transactional
     public boolean memberModify(MyPageRequest request) throws CustomException {
-        Member modifyingMember = getMember(request.getId());
-
-        return modifyingMember.update(request.getNickName(), request.getPhoneNumber());
+        return getMember(request.getId())
+                .update(request.getNickName(), request.getPhoneNumber());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PostResponse> myPost(String id) {
-        Member member = getMember(id);
 
-        return postRepository.findAllByMember(member)
+        return postRepository.findAllByMemberIdNumber(id)
                 .stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CommentResponse> myComment(String id) {
-        Member member = getMember(id);
 
-        return commentRepository.findAllByMember(member)
+        return commentRepository.findAllByMemberIdNumber(id)
                 .stream()
                 .map(CommentResponse::new)
                 .collect(Collectors.toList());
