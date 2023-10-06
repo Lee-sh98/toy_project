@@ -9,7 +9,6 @@ import hicc.toy_project.exception.CustomException;
 import hicc.toy_project.exception.ErrorCode;
 import hicc.toy_project.repository.MemberRepository;
 import hicc.toy_project.service.AdminPageService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +16,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
@@ -85,10 +86,10 @@ public class AdminPageTest {
 
             adminPageService.delegate(request);
 
-            Assertions.assertThat(currentPresident.getRole())
+            assertThat(currentPresident.getRole())
                     .isEqualTo(Role.GENERAL);
 
-            Assertions.assertThat(nextPresident.getRole())
+            assertThat(nextPresident.getRole())
                     .isEqualTo(Role.PRESIDENT);
         }
     }
@@ -109,7 +110,7 @@ public class AdminPageTest {
 
             adminPageService.changeRole(request);
 
-            Assertions.assertThat(getMember(testMemberId).getRole())
+            assertThat(getMember(testMemberId).getRole())
                     .isEqualTo(Role.EXECUTIVE);
         }
 
@@ -122,8 +123,8 @@ public class AdminPageTest {
                     .role(Role.EXECUTIVE)
                     .build();
 
-            Assertions.assertThatThrownBy(() -> adminPageService
-                            .changeRole(request))
+            assertThatThrownBy(() -> adminPageService
+                    .changeRole(request))
                     .isInstanceOf(CustomException.class);
         }
 
@@ -136,8 +137,8 @@ public class AdminPageTest {
                     .role(Role.PRESIDENT)
                     .build();
 
-            Assertions.assertThatThrownBy(() -> adminPageService
-                            .changeRole(request))
+            assertThatThrownBy(() -> adminPageService
+                    .changeRole(request))
                     .isInstanceOf(CustomException.class);
         }
 
@@ -150,8 +151,8 @@ public class AdminPageTest {
                     .role(Role.GENERAL)
                     .build();
 
-            Assertions.assertThatThrownBy(() -> adminPageService
-                            .changeRole(request))
+            assertThatThrownBy(() -> adminPageService
+                    .changeRole(request))
                     .isInstanceOf(CustomException.class);
         }
 
@@ -164,8 +165,8 @@ public class AdminPageTest {
                     .role(Role.GENERAL)
                     .build();
 
-            Assertions.assertThatThrownBy(() -> adminPageService
-                            .changeRole(request))
+            assertThatThrownBy(() -> adminPageService
+                    .changeRole(request))
                     .isInstanceOf(CustomException.class);
         }
     }
@@ -182,7 +183,7 @@ public class AdminPageTest {
                     .targetId(testMemberId)
                     .build();
 
-            Assertions.assertThat(adminPageService.expel(request))
+            assertThat(adminPageService.expel(request))
                     .isEqualTo(true);
         }
 
@@ -194,8 +195,8 @@ public class AdminPageTest {
                     .targetId(presidentId)  // 타겟 id를 회장으로 설정
                     .build();
 
-            Assertions.assertThatThrownBy(() -> adminPageService
-                            .expel(request))
+            assertThatThrownBy(() -> adminPageService
+                    .expel(request))
                     .isInstanceOf(CustomException.class);
         }
 
@@ -230,7 +231,7 @@ public class AdminPageTest {
 
             adminPageService.approve(request);
 
-            Assertions.assertThat(getMember(testApplicantId).getRole())
+            assertThat(getMember(testApplicantId).getRole())
                     .isEqualTo(Role.GENERAL);
 
         }
@@ -244,7 +245,7 @@ public class AdminPageTest {
                     .approveRequest(ApproveRequest.REJECT)
                     .build();
 
-            Assertions.assertThat(adminPageService.approve(request))
+            assertThat(adminPageService.approve(request))
                     .isEqualTo(true);
         }
 
@@ -256,8 +257,8 @@ public class AdminPageTest {
                     .targetId(testMemberId) // 지원자가 아닌 일반 회원 id를 설정
                     .build();
 
-            Assertions.assertThatThrownBy(() -> adminPageService
-                            .approve(request))
+            assertThatThrownBy(() -> adminPageService
+                    .approve(request))
                     .isInstanceOf(CustomException.class);
         }
     }
