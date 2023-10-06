@@ -115,7 +115,7 @@ public class UmbrellaRentalService {
         return member;
     }
 
-    public void validatePresident(String presidentId) {
+    private void validatePresident(String presidentId) {
         Member president = getMember(presidentId);
 
         if (!president.getRole().equals(Role.PRESIDENT)) {

@@ -27,6 +27,8 @@ public class LockerRentalService {
     private final LockerRepository lockerRepository;
 
     public LockerSimpleResponse rentLocker(LockerRentalRequest request) {
+        validateEligibleMember(request.getLessorId());
+
         Locker locker = getLocker(request.getLockerNumber());
         Member member = getMember(request.getLessorId());
 
